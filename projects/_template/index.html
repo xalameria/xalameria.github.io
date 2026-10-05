@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- TEMPLATE: copy this whole folder to projects/<your-project-id>/ and replace every [BRACKETED] part.
+     Delete any section you don't need. Steps: ADDING_A_PROJECT.md -->
+<title>[ProjectName] — [one-line tagline]</title>
+<meta name="description" content="[One sentence: what the project is and who it is for.]">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23123456'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-weight='800' font-size='26' fill='%23C8DFF1'%3EAA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../index.html"><span class="mono" aria-hidden="true">AA</span><span><b>Ahmed Alameri</b><small>← All projects</small></span></a>
+    <nav class="site-nav" aria-label="Project">
+      <ul id="navlist">
+        <li><a href="#question">The question</a></li>
+        <li><a href="#features">What it does</a></li>
+        <li><a href="#data">Data and method</a></li>
+        <li><a href="#limits">Limits</a></li>
+        <li><a href="../../index.html#work">All projects</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" aria-expanded="false" aria-controls="navlist" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<main id="main">
+<!-- ============ HERO ============ -->
+<div class="hero-shell">
+  <div class="hero">
+    <img class="art" src="../../assets/brand/darkvic-circuit-wide.webp" alt="" width="2000" height="370">
+    <span class="pill dark rv"><svg><use href="#i-layers"/></svg>[Collection, or a topic like "Urban mobility"]</span>
+    <h1 class="rv" style="margin-top:20px">[First part]<span style="color:var(--sky)">[Second part]</span></h1>
+    <p class="sub rv" style="font-size:clamp(1.15rem,2vw,1.5rem);font-weight:600;color:#fff">[One-line tagline.]</p>
+    <p class="sub rv">[Two sentences: the problem, who has it, and what you built.]</p>
+    <div class="meta-chips rv">
+      <span>[SUBJ00000 Subject name]</span><span>[Month YYYY]</span><span>[Main tool]</span>
+    </div>
+    <div class="ctas rv">
+      <a class="btn btn-ice" id="dashBtn" href="#features" aria-disabled="true"><span class="ic"><svg><use href="#i-arrow"/></svg></span><span id="dashLbl">Link coming soon</span></a>
+      <a class="btn btn-ghost" href="#features"><span class="ic"><svg><use href="#i-layers"/></svg></span>See what it does</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ THE QUESTION + KEY NUMBERS ============ -->
+<section id="question" aria-labelledby="q-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-pin"/></svg>The question</span>
+      <h2 id="q-h" class="rv">[The question, <span class="mute">in plain words]</span></h2>
+      <p class="lede rv">[Why it matters, and why the obvious answer is wrong or missing.]</p>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><b>[0]</b><span>[what the number counts]</span></div>
+      <div class="stat rv"><b>[0]</b><span>[what the number counts]</span></div>
+      <div class="stat rv"><b>[0]</b><span>[what the number counts]</span></div>
+      <div class="stat rv"><b>[0]</b><span>[what the number counts]</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AUDIENCES ============ -->
+<section class="alt" aria-labelledby="aud-h">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill rv"><svg><use href="#i-users"/></svg>Who it's for</span>
+      <h2 id="aud-h" class="rv">[Who uses it]</h2>
+    </div>
+    <div class="two">
+      <div class="card rv"><div class="ico"><svg><use href="#i-users"/></svg></div><h3>[Audience 1]</h3><p>[Their role and the decision they need to make.]</p></div>
+      <div class="card rv"><div class="ico"><svg><use href="#i-users"/></svg></div><h3>[Audience 2]</h3><p>[Their role and the decision they need to make.]</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features" aria-labelledby="f-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-layers"/></svg>What it does</span>
+      <h2 id="f-h" class="rv">[Headline about the design]</h2>
+    </div>
+    <!-- icons available: arrow back menu check mail map users shield eye db chart net spark globe pin layers play uni -->
+    <div class="cards3">
+      <div class="card rv"><div class="ico"><svg><use href="#i-map"/></svg></div><h3>[Feature]</h3><p>[What it does and why.]</p></div>
+      <div class="card rv"><div class="ico"><svg><use href="#i-chart"/></svg></div><h3>[Feature]</h3><p>[What it does and why.]</p></div>
+      <div class="card rv"><div class="ico"><svg><use href="#i-eye"/></svg></div><h3>[Feature]</h3><p>[What it does and why.]</p></div>
+    </div>
+    <figure class="shot rv" style="margin-top:40px">
+      <div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+      <img src="screenshot.png" alt="[Describe what the screenshot shows]" onerror="this.hidden=true;document.getElementById('shotMissing').hidden=false;">
+      <div class="shot-missing" id="shotMissing" hidden>Screenshot coming soon. Save one as <code>screenshot.png</code> in this folder.</div>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ DATA + METHOD ============ -->
+<section class="alt" id="data" aria-labelledby="d-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-db"/></svg>Data and method</span>
+      <h2 id="d-h" class="rv">[Where the numbers come from]</h2>
+    </div>
+    <div class="two">
+      <div class="tbl rv">
+        <table>
+          <thead><tr><th scope="col">Source</th><th scope="col">Used for</th><th scope="col">Licence</th></tr></thead>
+          <tbody>
+            <tr><td>[Publisher, dataset]</td><td>[What it feeds]</td><td>[CC BY 4.0]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="ticks rv">
+        <li><svg><use href="#i-check"/></svg><span><b>[Method step]</b> [one sentence].</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIMITS ============ -->
+<section id="limits" aria-labelledby="l-h">
+  <div class="wrap two">
+    <div class="rv">
+      <span class="pill"><svg><use href="#i-shield"/></svg>Honest limits</span>
+      <h2 id="l-h" style="margin-top:16px">What the data <span class="mute">cannot say</span></h2>
+    </div>
+    <ul class="ticks limits rv">
+      <li><svg><use href="#i-check"/></svg><span><b>[Limit.]</b> [Why it matters.]</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CREDITS ============ -->
+<section class="alt" aria-labelledby="c-h">
+  <div class="wrap">
+    <h2 id="c-h" class="rv" style="font-size:clamp(1.4rem,2.4vw,1.8rem)">Credits</h2>
+    <p class="rv" style="margin-top:12px;color:var(--dim);max-width:760px">[Who built it, for which subject, data credits, and an AI disclosure if any.]</p>
+  </div>
+</section>
+</main>
+
+<footer class="site-foot">
+  <img class="circuit" src="../../assets/brand/darkvic-circuit-wide.webp" alt="" loading="lazy" width="2000" height="370">
+  <div class="wrap">
+    <span><a href="../../index.html">← All projects</a> · © <span class="js-year">2026</span> Ahmed Alameri · <a class="js-email" href="#">Email</a></span>
+  </div>
+</footer>
+
+<script src="../../projects.js"></script>
+<script src="../../assets/site.js"></script>
+<script>
+  var DASHBOARD_URL = '';   // the live app or demo link, when there is one
+  if (DASHBOARD_URL) {
+    var b = document.getElementById('dashBtn');
+    b.href = DASHBOARD_URL; b.target = '_blank'; b.rel = 'noopener'; b.removeAttribute('aria-disabled');
+    document.getElementById('dashLbl').textContent = 'Open the project';
+  }
+  siteReveal();
+</script>
+</body>
+</html>

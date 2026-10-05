@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ahmed Alameri — projects</title>
+<meta name="description" content="Projects by Ahmed Alameri: spatial data, digital infrastructure and information visualisation, including the SaferVic collection (CrimeVic and DarkVic).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23123456'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-weight='800' font-size='26' fill='%23C8DFF1'%3EAA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<!--
+  HOME PAGE. Project cards, filters, the SaferVic band and the numbers are all
+  built from projects.js, so adding a project never means editing this file.
+  Text marked EDIT is yours to rewrite in your own words.
+-->
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mono" aria-hidden="true">AA</span><span><b>Ahmed Alameri</b><small>Spatial data · Digital infrastructure</small></span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul id="navlist">
+        <li><a href="#work">Projects</a></li>
+        <li><a href="#safervic">SaferVic</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" aria-expanded="false" aria-controls="navlist" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<main id="main">
+<div class="hero-shell" id="top">
+  <div class="hero">
+    <img class="art" src="assets/brand/darkvic-circuit-wide.webp" alt="" width="2000" height="370">
+    <span class="pill dark rv"><svg><use href="#i-uni"/></svg><span class="js-inst">The University of Melbourne</span></span>
+    <!-- EDIT: your headline -->
+    <h1 class="rv" style="margin-top:20px">I turn open data into tools <span class="mute">people can act on.</span></h1>
+    <!-- EDIT: one or two sentences about you -->
+    <p class="sub rv">Engineer working where spatial data meets real decisions: who loses mobile signal in a disaster, where crime is disproportionate per resident, and how to show uncertainty honestly. Every project here is built on open public data.</p>
+    <div class="ctas rv">
+      <a class="btn btn-ice" href="#work"><span class="ic"><svg><use href="#i-arrow"/></svg></span>See my projects</a>
+      <a class="btn btn-ghost" href="#contact"><span class="ic"><svg><use href="#i-mail"/></svg></span>Get in touch</a>
+    </div>
+    <div class="hero-stats rv" id="heroStats" aria-label="At a glance"></div>
+  </div>
+</div>
+
+<!-- ============ SAFERVIC COLLECTION ============ -->
+<section id="safervic" aria-labelledby="sv-h">
+  <div class="wrap collection">
+    <div class="rv">
+      <span class="pill"><svg><use href="#i-shield"/></svg>Featured collection</span>
+      <img class="logo" src="assets/brand/safervic-wordmark.png" alt="SaferVic" width="1148" height="539" style="margin-top:22px">
+      <p class="motto">Better Data · Faster Decisions · Safer Future</p>
+      <h2 id="sv-h" style="margin-top:18px;font-size:clamp(1.5rem,2.6vw,2rem)">Open-data tools for a <span class="mute">safer Victoria</span></h2>
+      <p class="lede" style="margin-top:12px">Each SaferVic project takes on a different kind of risk, shares one design language, and holds to the same honesty about what the data can and cannot say.</p>
+    </div>
+    <div class="mini rv" id="svList" aria-label="SaferVic projects"></div>
+  </div>
+</section>
+
+<!-- ============ ALL PROJECTS ============ -->
+<section class="alt" id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill"><svg><use href="#i-layers"/></svg>Projects</span>
+      <h2 id="work-h">Everything I've built, <span class="mute">newest first</span></h2>
+    </div>
+    <div class="filters" role="group" aria-label="Filter projects" id="filters"></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" aria-labelledby="about-h">
+  <div class="wrap two">
+    <div class="rv">
+      <span class="pill"><svg><use href="#i-users"/></svg>About</span>
+      <h2 id="about-h" style="margin-top:16px">How I <span class="mute">work</span></h2>
+      <!-- EDIT: your story in a few sentences -->
+      <p class="lede" style="margin-top:14px">I build each project for a named person with a real question, such as a council safety officer, a police planner or an emergency intelligence officer, and design backwards from the decision they need to make.</p>
+      <h3 style="margin-top:32px;font-size:1rem">Tools I've used</h3>
+      <div class="chips" id="tools" style="margin-top:12px"></div>
+    </div>
+    <ul class="ticks rv" style="display:grid;gap:16px">
+      <li class="card" style="display:flex;gap:14px"><svg><use href="#i-shield"/></svg><div><b style="color:var(--navy)">Honest about uncertainty.</b> "Probable", never certain. No evidence is not the same as safe, and every assumption stays on screen.</div></li>
+      <li class="card" style="display:flex;gap:14px"><svg><use href="#i-db"/></svg><div><b style="color:var(--navy)">Open data first.</b> Public, licensed sources with their attribution, so anyone can check a number where it was published.</div></li>
+      <li class="card" style="display:flex;gap:14px"><svg><use href="#i-eye"/></svg><div><b style="color:var(--navy)">Accessible by design.</b> Colour-blind-safe palettes, never colour alone, keyboard support, text size controls and guided tours.</div></li>
+      <li class="card" style="display:flex;gap:14px"><svg><use href="#i-users"/></svg><div><b style="color:var(--navy)">Built for a named audience.</b> Each view answers one person's question, before an event or during it.</div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" aria-labelledby="contact-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="contact rv">
+      <img class="art" src="assets/brand/darkvic-circuit-wide.webp" alt="">
+      <div>
+        <h2 id="contact-h">Let's talk about <span class="mute">your data problem.</span></h2>
+        <p>Questions about a project, a collaboration, or data you'd like to see turned into a tool.</p>
+        <div style="margin-top:24px"><a class="btn btn-ice js-email" href="#"><span class="ic"><svg><use href="#i-mail"/></svg></span>Email me</a></div>
+      </div>
+      <dl>
+        <dt>Email</dt><dd><a class="js-email" href="#"></a></dd>
+        <dt>Based at</dt><dd class="js-inst">The University of Melbourne</dd>
+        <dt>Location</dt><dd>Melbourne, Victoria</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-foot">
+  <img class="circuit" src="assets/brand/darkvic-circuit-wide.webp" alt="" loading="lazy" width="2000" height="370">
+  <div class="wrap">
+    <span>© <span class="js-year">2026</span> Ahmed Alameri. Data belongs to its publishers and is credited on each project page.</span>
+    <span>Built with assistance from Claude.</span>
+  </div>
+</footer>
+
+<script src="projects.js"></script>
+<script src="assets/site.js"></script>
+<script>
+  (function () {
+    var P = (window.PROJECTS || []).slice().sort(function (a, b) { return b.date.localeCompare(a.date); });
+    var grid = document.getElementById('grid'), fl = document.getElementById('filters');
+
+    /* numbers that grow with the list */
+    var subjects = {}, tools = {};
+    P.forEach(function (p) { if (/^[A-Z]{4}\d{5}/.test(p.subject)) subjects[p.subject.slice(0, 9)] = 1;
+                             (p.tools || []).forEach(function (t) { tools[t] = 1; }); });
+    var stat = function (n, l) { return '<div class="hstat"><b>' + n + '</b><span>' + l + '</span></div>'; };
+    document.getElementById('heroStats').innerHTML =
+      stat(P.length, P.length === 1 ? 'project' : 'projects') +
+      stat(P.filter(function (p) { return p.status === 'Live'; }).length, 'live') +
+      stat(Object.keys(subjects).length, 'university subjects') +
+      stat(Object.keys(tools).length, 'tools used');
+    document.getElementById('tools').innerHTML = Object.keys(tools).sort().map(function (t) { return '<span>' + t + '</span>'; }).join('');
+
+    /* SaferVic band */
+    document.getElementById('svList').innerHTML = P.filter(function (p) { return p.collection === 'SaferVic'; }).map(function (p) {
+      return '<a href="' + p.page + '"><b>' + p.name[0] + '<span>' + (p.name[1] || '') + '</span></b><small>' + p.tagline + '</small><em>' + p.subject + ' →</em></a>';
+    }).join('');
+
+    /* filters: tags used by two or more projects, plus "All" */
+    var count = {};
+    P.forEach(function (p) { p.tags.forEach(function (t) { count[t] = (count[t] || 0) + 1; }); });
+    var tags = Object.keys(count).filter(function (t) { return count[t] > 1; }).sort();
+    var cur = 'All';
+    function draw() {
+      var list = cur === 'All' ? P : P.filter(function (p) { return p.tags.indexOf(cur) >= 0; });
+      grid.innerHTML = list.length ? list.map(function (p) { return projectCard(p); }).join('') : '<p class="empty">No projects with this tag yet.</p>';
+      grid.querySelectorAll('.rv').forEach(function (e) { e.classList.add('in'); });
+    }
+    fl.innerHTML = ['All'].concat(tags).map(function (t) {
+      return '<button type="button" aria-pressed="' + (t === 'All') + '">' + t + '</button>';
+    }).join('');
+    if (!tags.length) fl.hidden = true;
+    fl.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      cur = b.textContent;
+      fl.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      draw();
+    });
+    draw();
+    if (window.SITE) document.querySelectorAll('.js-inst').forEach(function (e) { e.textContent = SITE.institution; });
+    siteReveal();
+  })();
+</script>
+</body>
+</html>

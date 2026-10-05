@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DarkVic — where the signal goes dark</title>
+<meta name="description" content="DarkVic infers probable mobile communication blackouts across Victoria from the evidence that survives a disaster: power outages, hazards and tower dependency.">
+<!--
+  DarkVic website v1 - GEOM30012, Ahmed Alameri, Group 6 (ACE)
+  Continues the cinematic presentation (presentation/index.html)
+  as a scrolling project site. Brand: navy #123456, steel #527FA9, ice #C8DFF1.
+
+  TO FINISH:
+    1. Set DASHBOARD_URL below once the Shiny app is deployed; the buttons
+       and QR code switch on automatically.
+    2. Drop the demo recording at website/assets/darkvic_demo.mp4
+       (or keep it at presentation/darkvic_show/assets/darkvic_demo.mp4).
+    3. Set CONTACT_EMAIL if you want a contact link in the footer.
+  Imagery generated with Higgsfield AI (disclosed in the footer).
+-->
+<link rel="icon" type="image/svg+xml" href="assets/darkvic-favicon-navy.svg">
+<link rel="apple-touch-icon" href="assets/darkvic-favicon-navy-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    /* brand */
+    --navy:#123456; --navy-950:#08111F; --navy-900:#0A1426; --navy-800:#0F2340;
+    --steel:#527FA9; --steel-700:#3F6A93; --sky:#76A5CF; --ice:#C8DFF1;
+    --ice-100:#EAF1F8; --ice-50:#F4F8FC;
+    /* text */
+    --txt:#344054; --dim:#5B6577; --muted-head:#6A8BAE;
+    /* states (match the dashboard) */
+    --red:#CC3311; --red-50:#FBEAE5; --amber:#E08214; --purple:#7B6FA8;
+    --orange:#E8772E; /* dashboard header accent */
+    /* system */
+    --radius-lg:28px; --radius:16px; --radius-sm:10px;
+    --shadow:0 1px 2px rgba(16,24,40,.05), 0 8px 24px rgba(18,52,86,.08);
+    --shadow-lg:0 24px 60px rgba(8,17,31,.18);
+    --ease:cubic-bezier(.16,1,.3,1);
+    --wrap:1200px;
+  }
+  *, *::before, *::after { box-sizing:border-box; }
+  * { margin:0; padding:0; }
+  html { scroll-behavior:smooth; scroll-padding-top:84px; }
+  body { font-family:'Inter', system-ui, 'Segoe UI', Arial, sans-serif; font-size:16px;
+         line-height:1.6; color:var(--txt); background:#FFFFFF;
+         -webkit-font-smoothing:antialiased; }
+  img { max-width:100%; display:block; }
+  a { color:inherit; }
+  h1, h2, h3, h4 { font-family:'Montserrat', Arial, sans-serif; color:var(--navy);
+                   line-height:1.12; letter-spacing:-0.015em; text-wrap:balance; }
+  h2 { font-size:clamp(1.9rem, 3.6vw, 2.9rem); font-weight:800; }
+  h2 .mute { color:var(--muted-head); }
+  h3 { font-size:1.15rem; font-weight:700; }
+  p { text-wrap:pretty; }
+  .wrap { width:100%; max-width:var(--wrap); margin:0 auto; padding:0 24px; }
+  section { padding:clamp(72px, 9vw, 120px) 0; position:relative; }
+  .skip { position:absolute; left:-999px; top:8px; z-index:100; background:var(--navy);
+          color:#fff; padding:10px 16px; border-radius:8px; }
+  .skip:focus { left:8px; }
+  :focus-visible { outline:3px solid var(--sky); outline-offset:3px; border-radius:6px; }
+
+  /* pill label, as in the reference ("About Us", "Testimonials") */
+  .pill { display:inline-flex; align-items:center; gap:8px; padding:7px 14px;
+          border-radius:999px; background:var(--ice-100); color:var(--navy);
+          font-size:.82rem; font-weight:600; letter-spacing:.01em; }
+  .pill svg { width:14px; height:14px; }
+  .pill.dark { background:rgba(200,223,241,.12); color:var(--ice);
+               border:1px solid rgba(200,223,241,.22); }
+  .lede { font-size:1.08rem; color:var(--dim); max-width:640px; }
+  .center { text-align:center; }
+  .center .lede { margin-left:auto; margin-right:auto; }
+  .head { margin-bottom:48px; }
+  .head h2 { margin-top:16px; }
+  .head .lede { margin-top:14px; }
+
+  /* buttons: pill with an icon circle, as in the reference */
+  .btn { display:inline-flex; align-items:center; gap:10px; min-height:48px;
+         padding:6px 22px 6px 6px; border-radius:999px; font-weight:600;
+         font-size:.95rem; text-decoration:none; cursor:pointer; border:0;
+         transition:transform .2s var(--ease), background .2s, box-shadow .2s;
+         font-family:inherit; }
+  .btn .ic { width:36px; height:36px; border-radius:50%; display:grid;
+             place-items:center; flex:none; transition:transform .25s var(--ease); }
+  .btn .ic svg { width:16px; height:16px; }
+  .btn:hover .ic { transform:rotate(-45deg); }
+  .btn:active { transform:scale(.97); }
+  .btn-ice { background:var(--ice); color:var(--navy); }
+  .btn-ice .ic { background:var(--navy); color:var(--ice); }
+  .btn-ice:hover { background:#DCEBF7; }
+  .btn-ghost { background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.55); }
+  .btn-ghost .ic { background:rgba(255,255,255,.14); color:#fff; }
+  .btn-ghost:hover { background:rgba(255,255,255,.1); }
+  .btn-navy { background:var(--navy); color:#fff; }
+  .btn-navy .ic { background:var(--ice); color:var(--navy); }
+  .btn-navy:hover { background:#0D2A47; }
+  .btn-line { background:#fff; color:var(--navy); border:1.5px solid #D0DCE8; }
+  .btn-line .ic { background:var(--ice-100); color:var(--navy); }
+  .btn[aria-disabled="true"] { opacity:.6; cursor:not-allowed; }
+
+  /* ---------- brand banner: mirrors the dashboard header ---------- */
+  .brandbar { background:linear-gradient(90deg, #0F2340 0%, #183A5E 50%, #2C5C8C 100%);
+              border-bottom:4px solid var(--orange); color:var(--ice); overflow:hidden; }
+  .brandbar .wrap { max-width:1440px; display:flex; justify-content:space-between;
+                    align-items:center; gap:24px; min-height:118px; padding-top:10px; padding-bottom:10px; }
+  .bb-left { display:flex; align-items:center; gap:18px; min-width:0; }
+  .bb-left > img { width:52px; height:52px; flex:none; }
+  .bb-eyebrow { font-size:.7rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+                color:#9DB6CF; margin-bottom:4px; }
+  .bb-eyebrow b { color:#fff; letter-spacing:.06em; text-transform:none; font-family:'Montserrat',sans-serif; font-size:.82rem; }
+  .bb-eyebrow b span { color:var(--sky); }
+  .bb-title { font-family:'Montserrat',sans-serif; font-weight:800; color:#fff;
+              font-size:clamp(1.7rem,3.2vw,2.6rem); line-height:1; letter-spacing:-0.01em; }
+  .bb-title span { color:var(--sky); }
+  .bb-tag { margin-top:8px; font-size:.74rem; font-weight:600; letter-spacing:.18em;
+            text-transform:uppercase; color:#E3EEF8; }
+  .bb-src { margin-top:6px; font-size:.78rem; color:#BCD2E7; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .bb-right { display:flex; align-items:center; flex:none; }
+  .bb-right .circuit { height:92px; width:auto; margin-right:18px; }
+  .bb-right .wordmark { height:96px; width:auto; }
+  .live { width:8px; height:8px; border-radius:50%; background:#7FD1A8;
+          box-shadow:0 0 0 0 rgba(127,209,168,.6); animation:ping 2.4s infinite; }
+  @keyframes ping { 0% { box-shadow:0 0 0 0 rgba(127,209,168,.55); }
+                    70%,100% { box-shadow:0 0 0 9px rgba(127,209,168,0); } }
+
+  /* ---------- hero ---------- */
+  .hero-shell { padding:16px 16px 0; background:#fff; }
+  .hero { position:relative; border-radius:var(--radius-lg); overflow:hidden;
+          min-height:min(860px, calc(100dvh - 56px)); color:#fff;
+          display:flex; flex-direction:column; isolation:isolate;
+          background:var(--navy-900); max-width:1440px; margin:0 auto; }
+  .hero-bg { position:absolute; inset:0; z-index:-2; width:100%; height:100%;
+             object-fit:cover; object-position:70% center;
+             animation:kb 28s ease-in-out alternate infinite; }
+  @keyframes kb { to { transform:scale(1.06); } }
+  .hero::after { content:""; position:absolute; inset:0; z-index:-1;
+                 background:linear-gradient(90deg, rgba(8,17,31,.92) 0%,
+                   rgba(8,17,31,.7) 42%, rgba(8,17,31,.25) 100%),
+                 linear-gradient(0deg, rgba(8,17,31,.65) 0%, rgba(8,17,31,0) 40%); }
+  canvas.fx { position:absolute; inset:0; z-index:-1; pointer-events:none; }
+
+  .nav { margin:18px 18px 0; padding:10px 10px 10px 22px; border-radius:999px;
+         display:flex; align-items:center; justify-content:space-between; gap:16px;
+         background:rgba(200,223,241,.09); border:1px solid rgba(200,223,241,.16);
+         backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+         position:relative; z-index:20; }
+  .nav .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav .logo img { height:40px; width:40px; }
+  .nav .logo span { font-family:'Montserrat',sans-serif; font-weight:800; color:#fff; font-size:1.15rem; }
+  .nav .logo span b { color:var(--sky); font-weight:800; }
+  .nav ul { list-style:none; display:flex; gap:4px; }
+  .nav ul a { display:block; padding:10px 14px; border-radius:999px; color:#E3EEF8;
+              text-decoration:none; font-size:.92rem; font-weight:500;
+              transition:background .2s, color .2s; }
+  .nav ul a:hover, .nav ul a.on { background:rgba(200,223,241,.14); color:#fff; }
+  .nav .call { display:flex; align-items:center; gap:10px; }
+  .menu-btn { display:none; width:44px; height:44px; border-radius:50%;
+              border:1px solid rgba(200,223,241,.3); background:transparent;
+              color:#fff; cursor:pointer; place-items:center; }
+  .menu-btn svg { width:20px; height:20px; }
+
+  .hero-body { flex:1; display:flex; flex-direction:column; justify-content:center;
+               padding:clamp(40px,6vw,72px) clamp(24px,5vw,72px) 32px; max-width:860px; }
+  .rating { display:flex; align-items:center; gap:10px; font-size:.9rem;
+            color:#D6E6F4; margin-bottom:22px; flex-wrap:wrap; }
+  .hero h1 { color:#fff; font-size:clamp(2.4rem, 5.6vw, 4.6rem); font-weight:800;
+             letter-spacing:-0.025em; line-height:1.04; }
+  .hero h1 .mute { color:rgba(200,223,241,.62); }
+  .hero .sub { margin-top:22px; font-size:clamp(1rem,1.3vw,1.12rem); color:#D6E6F4;
+               max-width:580px; line-height:1.65; }
+  .hero .ctas { margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
+
+  .hero-foot { display:flex; justify-content:space-between; align-items:flex-end;
+               gap:24px; padding:0 clamp(24px,5vw,72px) clamp(28px,4vw,44px);
+               flex-wrap:wrap; }
+  .proof { display:flex; align-items:center; gap:14px; }
+  .proof .badge { width:48px; height:48px; border-radius:50%; background:var(--ice);
+                  display:grid; place-items:center; flex:none; }
+  .proof .badge img { width:30px; }
+  .proof b { display:block; font-family:'Montserrat',sans-serif; font-size:1.05rem; }
+  .proof small { color:#BCD2E7; font-size:.85rem; }
+  .proof .sep { width:1px; height:40px; background:rgba(200,223,241,.25); margin:0 6px; }
+  .thumbs { display:flex; gap:12px; }
+  .thumbs a { width:112px; height:84px; border-radius:14px; overflow:hidden;
+              border:2px solid rgba(255,255,255,.35); position:relative;
+              transition:transform .25s var(--ease), border-color .25s; }
+  .thumbs a:hover, .thumbs a:focus-visible { transform:translateY(-4px); border-color:var(--ice); }
+  .thumbs img { width:100%; height:100%; object-fit:cover; }
+  .thumbs span { position:absolute; left:0; right:0; bottom:0; padding:14px 8px 5px;
+                 font-size:.7rem; font-weight:600; color:#fff;
+                 background:linear-gradient(transparent, rgba(8,17,31,.85)); }
+
+  /* ---------- data partners strip (reference: "Trusted by") ---------- */
+  .sources { padding:56px 0 24px; }
+  .sources h2 { font-size:1.15rem; font-weight:700; text-align:center; color:var(--navy);
+                letter-spacing:0; }
+  .src-row { margin-top:28px; display:flex; justify-content:center; flex-wrap:wrap;
+             gap:14px 44px; }
+  .src { display:flex; align-items:center; gap:10px; color:#4A5A70;
+         font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.02rem; }
+  .src svg { width:26px; height:26px; color:var(--steel); }
+  .src small { display:block; font-family:'Inter',sans-serif; font-weight:500;
+               font-size:.74rem; color:var(--dim); }
+
+  /* ---------- about (reference: two-column, staggered photos) ---------- */
+  .about-grid { display:grid; grid-template-columns:220px 1fr; gap:40px; }
+  .about-photos { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:44px; }
+  .about-photos .ph { border-radius:var(--radius); overflow:hidden; background:var(--ice-100); }
+  .about-photos .ph img { width:100%; height:100%; object-fit:cover; }
+  .about-photos .tall { aspect-ratio:3/4; }
+  .about-right { display:flex; flex-direction:column; gap:24px; }
+  .about-right .ph { aspect-ratio:4/3; }
+  .about-right p { color:var(--dim); }
+  .ticks { list-style:none; display:grid; gap:10px; }
+  .ticks li { display:flex; gap:10px; align-items:flex-start; color:var(--txt); font-weight:500; }
+  .ticks svg { width:20px; height:20px; flex:none; margin-top:2px; color:var(--steel-700); }
+
+  /* ---------- event band (reference: "Our impact in numbers") ---------- */
+  .band { background:var(--navy-900); color:#D7E5F2; overflow:hidden; isolation:isolate; }
+  .band-bg { position:absolute; inset:0; z-index:-2; width:100%; height:100%; object-fit:cover; opacity:.35; }
+  .band::after { content:""; position:absolute; inset:0; z-index:-1;
+                 background:linear-gradient(180deg, rgba(10,20,38,.75), rgba(10,20,38,.95)); }
+  .band h2 { color:#fff; margin-top:16px; }
+  .band h2 .mute { color:rgba(200,223,241,.6); }
+  .band .lede { color:#BCD2E7; }
+  .gstats { margin-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .gstat { background:rgba(200,223,241,.06); border:1px solid rgba(200,223,241,.16);
+           border-radius:var(--radius); padding:28px; }
+  .gstat b { display:block; font-family:'Montserrat',sans-serif; font-weight:800;
+             font-size:clamp(2.2rem,4vw,3.2rem); color:var(--ice); line-height:1;
+             font-variant-numeric:tabular-nums; }
+  .gstat span { display:block; margin-top:12px; font-weight:600; color:#fff; }
+  .gstat small { display:block; margin-top:4px; color:#9DB6CF; font-size:.86rem; }
+  .question { margin-top:40px; font-family:'Montserrat',sans-serif; font-weight:700;
+              font-size:clamp(1.25rem,2.4vw,1.8rem); color:#fff; max-width:760px; line-height:1.3; }
+  .question em { font-style:normal; color:var(--ice); }
+
+  /* ---------- problem ---------- */
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .stat { background:#fff; border:1px solid #E3EAF2; border-radius:var(--radius);
+          padding:26px; display:flex; gap:18px; align-items:flex-start; box-shadow:var(--shadow); }
+  .sico { width:52px; height:52px; border-radius:50%; background:var(--ice-100);
+          display:grid; place-items:center; flex:none; color:var(--steel-700); }
+  .sico svg { width:24px; height:24px; }
+  .stat.alert .sico { background:var(--red-50); color:var(--red); }
+  .stat b { display:block; font-family:'Montserrat',sans-serif; font-weight:800;
+            font-size:2.3rem; line-height:1; color:var(--navy); font-variant-numeric:tabular-nums; }
+  .stat.alert b { color:var(--red); }
+  .stat span { display:block; margin-top:8px; font-weight:600; color:var(--txt); }
+  .stat small { display:block; margin-top:3px; color:var(--dim); font-size:.86rem; }
+  .diagram { margin-top:24px; background:var(--ice-50); border:1px solid #E3EAF2;
+             border-radius:var(--radius); padding:24px; }
+  .diagram svg { width:100%; height:auto; display:block; }
+  .dlabel { font-size:.88rem; color:var(--dim); margin-top:12px; }
+  .scroll-x { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .scroll-x svg { min-width:720px; }
+
+  /* ---------- how it works ---------- */
+  .how { background:var(--ice-50); }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:24px; }
+  .step { background:#fff; border-radius:var(--radius); padding:26px; box-shadow:var(--shadow);
+          position:relative; transition:transform .25s var(--ease), box-shadow .25s; }
+  .step:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+  .step .n { position:absolute; top:20px; right:22px; font-family:'Montserrat',sans-serif;
+             font-weight:800; font-size:.85rem; color:#A9BED3; }
+  .step .sico { margin-bottom:18px; }
+  .step p { font-size:.93rem; color:var(--dim); margin-top:8px; }
+  .rules { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:24px; }
+  .rule { background:var(--navy); color:#D7E5F2; border-radius:var(--radius); padding:24px 26px; }
+  .rule b { font-family:'Montserrat',sans-serif; font-size:1.4rem; color:var(--ice); }
+  .rule .t { font-weight:600; color:#fff; margin:4px 0 8px; }
+  .rule p { font-size:.92rem; color:#BCD2E7; }
+  .principle { margin-top:32px; display:flex; gap:14px; align-items:center;
+               background:#fff; border-left:4px solid var(--red); border-radius:var(--radius-sm);
+               padding:18px 22px; box-shadow:var(--shadow); font-weight:600; color:var(--navy); }
+  .principle svg { width:24px; height:24px; color:var(--red); flex:none; }
+
+  /* ---------- battery dial (interactive) ---------- */
+  .dial { display:grid; grid-template-columns:1fr 1.25fr; gap:40px; align-items:center; }
+  .panel { background:#fff; border:1px solid #E3EAF2; border-radius:var(--radius-lg);
+           padding:28px; box-shadow:var(--shadow-lg); }
+  .seg { display:inline-flex; background:var(--ice-100); border-radius:999px; padding:4px; gap:4px; }
+  .seg button { min-height:44px; min-width:64px; padding:0 18px; border:0; border-radius:999px;
+                background:transparent; font:600 .95rem 'Inter',sans-serif; color:var(--navy);
+                cursor:pointer; transition:background .2s, color .2s; }
+  .seg button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+  .ctl { margin-top:22px; }
+  .ctl label { display:flex; justify-content:space-between; font-weight:600; color:var(--navy);
+               font-size:.95rem; margin-bottom:10px; }
+  .ctl output { font-variant-numeric:tabular-nums; color:var(--steel-700); }
+  input[type=range] { width:100%; accent-color:var(--navy); height:32px; cursor:pointer; }
+  .timeline { position:relative; margin-top:26px; height:40px; border-radius:10px;
+              background:var(--ice-100); overflow:hidden; display:flex; }
+  .tl-batt { background:repeating-linear-gradient(135deg, #9FC0DE 0 8px, #B6D0E8 8px 16px);
+             transition:width .45s var(--ease); }
+  .tl-dark { flex:1; background:var(--navy); }
+  .tl-mark { position:absolute; top:-6px; bottom:-6px; width:3px; background:var(--red);
+             border-radius:2px; transition:left .3s var(--ease); }
+  .tl-mark::after { content:""; position:absolute; top:-4px; left:-5px; width:13px; height:13px;
+                    border-radius:50%; background:var(--red); border:2px solid #fff; }
+  .tl-scale { display:flex; justify-content:space-between; font-size:.78rem; color:var(--dim);
+              margin-top:6px; font-variant-numeric:tabular-nums; }
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; font-size:.82rem; color:var(--dim); }
+  .legend i { display:inline-block; width:14px; height:14px; border-radius:4px; vertical-align:-2px; margin-right:6px; }
+  .verdicts { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px; }
+  .verdict { border-radius:14px; padding:16px; border:1.5px solid #E3EAF2; transition:background .3s, border-color .3s; }
+  .verdict .town { font-size:.8rem; color:var(--dim); font-weight:600; }
+  .verdict .state { display:flex; align-items:center; gap:8px; margin-top:6px;
+                    font-family:'Montserrat',sans-serif; font-weight:700; color:var(--navy); }
+  .verdict .state svg { width:20px; height:20px; flex:none; }
+  .verdict p { font-size:.84rem; color:var(--dim); margin-top:6px; }
+  .verdict[data-s="dark"] { background:var(--red-50); border-color:#F0B9A9; }
+  .verdict[data-s="dark"] .state { color:var(--red); }
+  .verdict[data-s="batt"] { background:#FDF3E7; border-color:#F2CFA2; }
+  .verdict[data-s="batt"] .state { color:#9A5208; }
+  .verdict[data-s="ok"] .state { color:var(--steel-700); }
+
+  /* ---------- audiences (reference: testimonials) ---------- */
+  .aud { background:var(--ice-50); }
+  .aud-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+  .aud-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; align-items:center; }
+  .qcard { background:#fff; border-radius:var(--radius); padding:30px 28px; text-align:center;
+           box-shadow:var(--shadow); }
+  .qcard.feat { padding:40px 30px; box-shadow:var(--shadow-lg); border:1.5px solid var(--ice); }
+  .qmark { width:48px; height:48px; border-radius:50%; background:var(--ice-100);
+           display:grid; place-items:center; margin:0 auto 18px; color:var(--navy); }
+  .qcard.feat .qmark { background:var(--navy); color:var(--ice); }
+  .qmark svg { width:20px; height:20px; }
+  .qcard blockquote { font-size:1.05rem; color:var(--navy); font-weight:500; line-height:1.55; }
+  .qcard .ans { margin-top:14px; font-size:.9rem; color:var(--dim); }
+  .who { margin-top:22px; display:flex; align-items:center; justify-content:center; gap:12px; text-align:left; }
+  .who .av { width:44px; height:44px; border-radius:50%; overflow:hidden; background:var(--ice-100);
+             display:grid; place-items:center; color:var(--steel-700); flex:none; }
+  .who .av img { width:100%; height:100%; object-fit:cover; }
+  .who .av svg { width:22px; height:22px; }
+  .who b { display:block; color:var(--navy); font-size:.92rem; }
+  .who small { color:var(--dim); font-size:.8rem; }
+  .persona-note { margin-top:24px; font-size:.82rem; color:var(--dim); text-align:center; }
+
+  /* ---------- case studies (reference: blog) ---------- */
+  .cases { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .case { background:#fff; border:1px solid #E3EAF2; border-radius:var(--radius); overflow:hidden;
+          display:flex; flex-direction:column; transition:transform .25s var(--ease), box-shadow .25s; }
+  .case:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+  .case .img { aspect-ratio:3/2; overflow:hidden; background:var(--ice-100); }
+  .case .img img { width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease); }
+  .case:hover .img img { transform:scale(1.04); }
+  .case .body { padding:22px 24px 24px; display:flex; flex-direction:column; flex:1; }
+  .meta { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:.8rem; color:var(--dim); }
+  .tag { background:var(--navy); color:#fff; border-radius:999px; padding:3px 10px; font-weight:600; font-size:.74rem; }
+  .tag.red { background:var(--red); }
+  .tag.steel { background:var(--steel-700); }
+  .case h3 { margin:12px 0 8px; }
+  .case p { font-size:.93rem; color:var(--dim); flex:1; }
+  .case .kpis { display:flex; gap:18px; margin:16px 0 18px; padding-top:14px; border-top:1px solid #EDF2F7; }
+  .case .kpis b { display:block; font-family:'Montserrat',sans-serif; font-size:1.25rem; color:var(--navy); }
+  .case .kpis small { font-size:.76rem; color:var(--dim); }
+  .more { display:inline-flex; align-items:center; gap:8px; font-weight:600; color:var(--navy);
+          text-decoration:none; font-size:.92rem; min-height:44px; }
+  .more svg { width:16px; height:16px; transition:transform .2s; }
+  .more:hover svg { transform:translate(3px,-3px); }
+
+  /* ---------- demo ---------- */
+  .demo { background:var(--navy-900); color:#D7E5F2; }
+  .demo h2 { color:#fff; }
+  .demo h2 .mute { color:rgba(200,223,241,.6); }
+  .demo .lede { color:#BCD2E7; }
+  .video { max-width:1000px; margin:0 auto; border-radius:var(--radius); overflow:hidden;
+           box-shadow:0 30px 80px rgba(0,0,0,.5); background:#060D1C; aspect-ratio:16/9; position:relative; }
+  .video video { width:100%; height:100%; display:block; object-fit:cover; }
+  .acts { max-width:1000px; margin:24px auto 0; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .act { border:1px solid rgba(200,223,241,.16); border-radius:14px; padding:18px 20px; font-size:.92rem; }
+  .act b { color:var(--ice); display:block; margin-bottom:4px; font-family:'Montserrat',sans-serif; }
+  .vid-missing { position:absolute; inset:0; display:none; place-items:center; text-align:center;
+                 padding:24px; color:#9DB6CF; font-size:.95rem; }
+  .vid-missing code { color:var(--ice); }
+
+  /* ---------- dashboard preview ---------- */
+  .kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+  .kpi { background:#fff; border:1px solid #E3EAF2; border-top:3px solid var(--steel);
+         border-radius:12px; padding:16px 18px; box-shadow:var(--shadow); }
+  .kpi.warn { border-top-color:var(--orange); }
+  .kpi.alert { border-top-color:var(--red); }
+  .kpi small { display:block; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+               color:var(--dim); font-weight:600; }
+  .kpi b { display:block; font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.8rem;
+           color:var(--navy); margin-top:4px; font-variant-numeric:tabular-nums; }
+  .kpi span { font-size:.8rem; color:var(--dim); }
+  .browser { border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-lg);
+             border:1px solid #D0DCE8; background:#fff; }
+  .browser .bar { display:flex; align-items:center; gap:7px; padding:10px 14px; background:#EEF3F8;
+                  border-bottom:1px solid #D0DCE8; }
+  .browser .bar i { width:11px; height:11px; border-radius:50%; background:#C9D5E2; }
+  .browser .bar span { margin-left:10px; font-size:.78rem; color:var(--dim); background:#fff;
+                       border-radius:6px; padding:3px 12px; flex:1; max-width:420px; }
+  .browser img { width:100%; height:auto; }
+  .browser { position:relative; }
+  .embed-cover { position:absolute; inset:41px 0 0; display:grid; place-items:center;
+                 background:rgba(8,17,31,.45); }
+  .embed-cover[hidden] { display:none; }
+  .browser iframe { display:block; width:100%; height:min(860px, 85dvh); border:0; background:#fff; }
+  .views { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; justify-content:center; }
+  .views span { background:var(--ice-100); color:var(--navy); border-radius:999px; padding:8px 14px;
+                font-size:.86rem; font-weight:600; }
+
+  /* ---------- seven layers ---------- */
+  .layers { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+  .layer { border:1px solid #E3EAF2; border-radius:14px; padding:20px 22px; background:#fff;
+           display:flex; gap:14px; align-items:flex-start; }
+  .layer .num { width:34px; height:34px; border-radius:10px; background:var(--navy); color:var(--ice);
+                display:grid; place-items:center; font-family:'Montserrat',sans-serif; font-weight:800;
+                font-size:.85rem; flex:none; }
+  .layer h3 { font-size:1rem; }
+  .layer p { font-size:.88rem; color:var(--dim); margin-top:4px; }
+
+  /* ---------- scale + limits ---------- */
+  .limits { background:var(--ice-50); }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px; }
+  .col { background:#fff; border-radius:var(--radius); padding:28px 30px; box-shadow:var(--shadow); }
+  .col h3 { display:flex; align-items:center; gap:10px; font-size:.82rem; letter-spacing:.16em;
+            text-transform:uppercase; margin-bottom:16px; }
+  .col h3 svg { width:20px; height:20px; }
+  .col.scale h3 { color:var(--steel-700); }
+  .col.honest h3 { color:var(--red); }
+  .col p { font-size:.95rem; margin-bottom:12px; color:var(--txt); }
+  .col p b { color:var(--navy); }
+
+  /* ---------- join the network ---------- */
+  .join-top { display:grid; grid-template-columns:1fr 1.15fr; gap:32px; align-items:start; }
+  .dist-pick { display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 18px; }
+  .dist-pick button { min-height:44px; padding:0 16px; border-radius:999px; cursor:pointer;
+                      font:600 .9rem 'Inter',sans-serif; color:var(--navy); background:#fff;
+                      border:1.5px dashed var(--steel); transition:background .2s, color .2s; }
+  .dist-pick button.is-live { border-style:solid; }
+  .dist-pick button[aria-pressed="true"] { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .dist-card { background:#fff; border:1px solid #E3EAF2; border-radius:var(--radius); padding:24px;
+               box-shadow:var(--shadow); }
+  .dist-card .status { display:inline-flex; align-items:center; gap:8px; font-size:.82rem; font-weight:600;
+                       padding:5px 12px; border-radius:999px; background:var(--ice-100); color:var(--steel-700); }
+  .dist-card .status.is-live { background:#E6F5EE; color:#1E6B47; }
+  .dist-card .status svg { width:16px; height:16px; }
+  .dist-card h3 { margin:12px 0 6px; font-size:1.3rem; }
+  .dist-card p { color:var(--dim); font-size:.94rem; }
+  .dist-card dl { display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin-top:14px; font-size:.9rem; }
+  .dist-card dt { color:var(--dim); }
+  .dist-card dd { color:var(--navy); font-weight:600; }
+  .onboard { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:40px 0; }
+  .ob { background:#fff; border:1px solid #E3EAF2; border-radius:14px; padding:20px; position:relative; }
+  .ob .num { width:34px; height:34px; border-radius:10px; background:var(--ice-100); color:var(--navy);
+             display:grid; place-items:center; font-family:'Montserrat',sans-serif; font-weight:800; font-size:.85rem; }
+  .ob h3 { font-size:1rem; margin:12px 0 6px; }
+  .ob p { font-size:.88rem; color:var(--dim); }
+  .join-form-wrap { display:grid; grid-template-columns:1fr 1.4fr; gap:32px; align-items:start; }
+  .needs { background:var(--navy); color:#D7E5F2; border-radius:var(--radius-lg); padding:28px; }
+  .needs h3 { color:#fff; }
+  .needs ul { list-style:none; display:grid; gap:12px; margin-top:16px; }
+  .needs li { display:flex; gap:10px; font-size:.93rem; }
+  .needs li svg { width:20px; height:20px; flex:none; color:var(--ice); margin-top:2px; }
+  .needs .fine { margin-top:18px; font-size:.82rem; color:#9DB6CF; }
+  form.eoi { background:#fff; border:1px solid #E3EAF2; border-radius:var(--radius-lg); padding:28px; box-shadow:var(--shadow-lg); }
+  .fgrid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .field { display:flex; flex-direction:column; gap:6px; }
+  .field.full { grid-column:1 / -1; }
+  .field label, .field legend { font-weight:600; color:var(--navy); font-size:.9rem; }
+  .field .req { color:var(--red); }
+  .field input, .field select, .field textarea { font:inherit; font-size:1rem; color:var(--txt); min-height:48px;
+         padding:10px 14px; border:1.5px solid #C9D6E3; border-radius:10px; background:#fff; width:100%; }
+  .field textarea { min-height:110px; resize:vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline:3px solid var(--sky); outline-offset:1px; border-color:var(--steel); }
+  .field .help { font-size:.8rem; color:var(--dim); }
+  .field .err { font-size:.82rem; color:var(--red); font-weight:600; display:none; }
+  .field.bad input, .field.bad select { border-color:var(--red); }
+  .field.bad .err { display:block; }
+  fieldset.field { border:0; }
+  .checks { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:4px; }
+  .checks label { display:flex; gap:10px; align-items:center; font-weight:500; color:var(--txt); min-height:40px; cursor:pointer; }
+  .checks input { width:20px; height:20px; min-height:0; accent-color:var(--navy); }
+  .form-foot { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-top:22px; }
+  .form-foot small { color:var(--dim); font-size:.8rem; max-width:340px; }
+  .form-msg { margin-top:16px; border-radius:12px; padding:14px 16px; font-size:.9rem; display:none; }
+  .form-msg.ok { display:block; background:#E6F5EE; color:#1E6B47; }
+  .form-msg.bad { display:block; background:var(--red-50); color:#8A2410; }
+  .form-msg a { color:inherit; font-weight:700; }
+
+  /* ---------- method + data ---------- */
+  .method-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:28px; align-items:start; }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  caption { text-align:left; font-weight:700; color:var(--navy); padding-bottom:12px;
+            font-family:'Montserrat',sans-serif; }
+  th, td { text-align:left; padding:12px 14px; border-bottom:1px solid #E3EAF2; vertical-align:top; }
+  th { background:var(--ice-50); color:var(--navy); font-weight:600; font-size:.82rem; }
+  td:first-child { font-weight:600; color:var(--navy); }
+  .tbl { border:1px solid #E3EAF2; border-radius:var(--radius); overflow:auto; background:#fff; }
+  .side-cards { display:grid; gap:16px; }
+  .side { border-radius:var(--radius); padding:22px 24px; background:var(--ice-50); border:1px solid #E3EAF2; }
+  .side h3 { display:flex; gap:10px; align-items:center; font-size:1rem; margin-bottom:8px; }
+  .side h3 svg { width:20px; height:20px; color:var(--steel-700); }
+  .side p, .side li { font-size:.9rem; color:var(--dim); }
+  .side ul { padding-left:18px; display:grid; gap:4px; }
+
+  /* ---------- team + faq ---------- */
+  .team-grid { display:grid; grid-template-columns:1fr 1.3fr; gap:40px; align-items:start; }
+  .profile { background:var(--navy); color:#D7E5F2; border-radius:var(--radius-lg); padding:32px;
+             position:relative; overflow:hidden; }
+  .profile .neur { position:absolute; right:-80px; bottom:-10px; width:420px; opacity:.35; pointer-events:none; }
+  .profile .mark { width:72px; height:72px; border-radius:20px; background:var(--ice);
+                   display:grid; place-items:center; }
+  .profile .mark img { width:48px; }
+  .profile h3 { color:#fff; font-size:1.5rem; margin-top:20px; }
+  .profile .role { color:var(--ice); font-weight:600; margin-top:4px; }
+  .profile p { margin-top:14px; font-size:.95rem; color:#BCD2E7; position:relative; }
+  .profile dl { margin-top:22px; display:grid; grid-template-columns:auto 1fr; gap:8px 16px;
+                font-size:.88rem; position:relative; }
+  .profile dt { color:#9DB6CF; }
+  .profile dd { color:#fff; font-weight:500; }
+  .faq details { border-bottom:1px solid #E3EAF2; }
+  .faq summary { list-style:none; cursor:pointer; padding:20px 44px 20px 0; position:relative;
+                 font-family:'Montserrat',sans-serif; font-weight:700; color:var(--navy); font-size:1.02rem; }
+  .faq summary::-webkit-details-marker { display:none; }
+  .faq summary::after { content:""; position:absolute; right:6px; top:50%; width:28px; height:28px;
+                        margin-top:-14px; border-radius:50%; background:var(--ice-100)
+                        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23123456' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center/14px no-repeat;
+                        transition:transform .25s var(--ease); }
+  .faq details[open] summary::after { transform:rotate(45deg); }
+  .faq .a { padding:0 44px 22px 0; color:var(--dim); font-size:.95rem; }
+
+  /* ---------- SaferVic family ---------- */
+  .family { background:var(--ice-50); }
+  .sv-logo { display:block; width:min(260px, 60vw); height:auto; margin:22px auto 4px; }
+  .sv-motto { margin-top:10px; font-size:.78rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+  .sv-word { font-family:'Montserrat',sans-serif; font-weight:800; color:var(--navy); letter-spacing:-0.02em; }
+  .sv-word span { color:var(--steel-700); }
+  .fam-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .prod { background:#fff; border:1px solid #E3EAF2; border-radius:var(--radius-lg); padding:30px;
+          box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px; position:relative; }
+  .prod.here { border:2px solid var(--navy); }
+  .prod .here-tag { position:absolute; top:20px; right:20px; font-size:.75rem; font-weight:700;
+                    background:var(--navy); color:#fff; border-radius:999px; padding:4px 12px; }
+  .prod .pname { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.7rem; color:var(--navy); line-height:1; }
+  .prod .pname span { color:var(--steel-700); }
+  .prod .ptag { font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+  .prod p { color:var(--dim); font-size:.95rem; flex:1; }
+  .prod .pmeta { font-size:.82rem; color:var(--dim); border-top:1px solid #EDF2F7; padding-top:12px; }
+
+  /* ---------- CTA band (reference: "Stay safe this winter") ---------- */
+  .cta-wrap { padding:0 0 80px; }
+  .cta { position:relative; border-radius:var(--radius-lg); overflow:hidden; color:#fff;
+         padding:clamp(36px,5vw,64px); display:grid; grid-template-columns:1fr auto; gap:40px;
+         align-items:center; isolation:isolate; background:var(--navy-900); }
+  .cta > img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; }
+  .cta::after { content:""; position:absolute; inset:0; z-index:-1;
+                background:linear-gradient(90deg, rgba(8,17,31,.9) 0%, rgba(8,17,31,.55) 60%, rgba(8,17,31,.35)); }
+  .cta h2 { color:#fff; }
+  .cta h2 .mute { color:rgba(200,223,241,.65); }
+  .cta p { margin-top:14px; color:#D6E6F4; max-width:520px; }
+  .cta .ctas { margin-top:28px; display:flex; gap:14px; flex-wrap:wrap; }
+  .qr { width:200px; height:200px; background:#fff; border-radius:var(--radius); padding:14px;
+        display:grid; place-items:center; text-align:center; color:var(--dim); font-size:.86rem;
+        box-shadow:0 20px 50px rgba(0,0,0,.4); }
+  .qr img, .qr canvas { width:100% !important; height:auto !important; }
+
+  /* ---------- footer ---------- */
+  footer { background:var(--ice-50); border-top:1px solid #E3EAF2; padding:64px 0 0; font-size:.92rem; }
+  .fgrid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1.3fr; gap:40px; }
+  .fgrid .logo img { height:72px; width:auto; margin-left:-8px; }
+  .fcircuit { display:block; width:100%; max-width:980px; height:auto; margin:0 auto 36px; }
+  .fgrid > div > p { margin-top:14px; color:var(--dim); max-width:320px; }
+  footer h4 { font-size:1rem; margin-bottom:14px; }
+  footer ul { list-style:none; display:grid; gap:6px; }
+  footer ul a { color:var(--dim); text-decoration:none; display:inline-block; padding:3px 0; }
+  footer ul a:hover { color:var(--navy); text-decoration:underline; }
+  .sched { background:#fff; border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); }
+  .sched div { display:flex; justify-content:space-between; gap:12px; padding:7px 0;
+               border-bottom:1px dashed #E3EAF2; font-size:.86rem; }
+  .sched div:last-child { border:0; }
+  .sched span { color:var(--dim); }
+  .sched b { color:var(--navy); font-weight:600; text-align:right; }
+  .fbot { margin-top:48px; border-top:1px solid #E3EAF2; padding:20px 0 28px; display:flex;
+          justify-content:space-between; gap:16px; flex-wrap:wrap; color:var(--dim); font-size:.82rem; }
+
+  /* ---------- reveal ---------- */
+  .rv { opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .rv.in { opacity:1; transform:none; }
+  .rv.d1 { transition-delay:.08s; } .rv.d2 { transition-delay:.16s; } .rv.d3 { transition-delay:.24s; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1080px) {
+    .nav ul { display:none; }
+    .nav.open ul { display:flex; flex-direction:column; position:absolute; top:calc(100% + 8px);
+                   left:0; right:0; background:rgba(10,20,38,.97); border:1px solid rgba(200,223,241,.18);
+                   border-radius:20px; padding:10px; }
+    .nav.open ul a { padding:14px 16px; }
+    .menu-btn { display:grid; }
+    .steps, .kpi-row, .onboard { grid-template-columns:repeat(2,1fr); }
+    .fgrid { grid-template-columns:1fr 1fr; }
+    .bb-right .circuit { display:none; }
+  }
+  @media (max-width:860px) {
+    .about-grid, .dial, .method-grid, .team-grid, .join-top, .join-form-wrap, .fam-grid { grid-template-columns:1fr; }
+    .gstats, .stats, .rules, .aud-grid, .cases, .cols, .acts { grid-template-columns:1fr; }
+    .cta { grid-template-columns:1fr; }
+    .thumbs { display:none; }
+    .nav .call .btn span.lbl { display:none; }
+    .nav .call .btn { padding:6px; }
+  }
+  @media (max-width:560px) {
+    .hero-shell { padding:8px 8px 0; }
+    .hero { border-radius:20px; }
+    .nav { margin:10px 10px 0; padding-left:16px; }
+    .nav .logo img { height:38px; }
+    .tbl table, .tbl tbody, .tbl tr, .tbl td { display:block; }
+    .tbl thead { position:absolute; left:-9999px; }
+    .tbl tr { padding:12px 0; border-bottom:1px solid #E3EAF2; }
+    .tbl td { border:0; padding:4px 16px; }
+    .tbl td[data-l]::before { content:attr(data-l) ": "; font-weight:600; color:var(--navy); }
+    .about-photos, .steps, .verdicts, .fgrid, .onboard, .fgrid2, .checks { grid-template-columns:1fr; }
+    .bb-src, .bb-right { display:none; }
+    .brandbar .wrap { min-height:84px; }
+    .bb-left > img { width:42px; height:42px; }
+    .bb-tag { letter-spacing:.12em; font-size:.68rem; }
+    .proof .sep, .proof .second { display:none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+    .rv { opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- inline icon sprite (Lucide-style, 2px stroke) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></symbol>
+    <symbol id="i-tower" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><path d="M8.5 5a5 5 0 0 1 7 0"/><path d="M6.5 3a8 8 0 0 1 11 0" opacity=".5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6.2-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="10.3" r="2.2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19L12 3z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.7 2.7L16 9.8"/></symbol>
+    <symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><path d="M12 12 18 6"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7M4 12h10M4 17h6"/><circle cx="17" cy="7" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="15" cy="17" r="2"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24" fill="currentColor"><path d="M4 18v-5.5C4 8.4 6 6 9.5 5.5v2.6C7.7 8.6 7 9.8 7 11.5h3V18zm10 0v-5.5c0-4.1 2-6.5 5.5-7v2.6c-1.8.5-2.5 1.7-2.5 3.4h3V18z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></symbol>
+    <symbol id="i-net" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="5" r="2.4"/><circle cx="19" cy="19" r="2.4"/><line x1="7.2" y1="11" x2="16.8" y2="5.9"/><line x1="7.2" y1="13" x2="16.8" y2="18.1"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 7-2.7 7-6.8 0-4-3-6.2-4.3-9.7-.5 2.4-2 3.6-3.2 4.2.3-3.3-1.3-6.2-3.5-7.7C8 6.7 5 9.3 5 15.2 5 19.3 8 22 12 22z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.3-5.5 6.5-5.5s5.9 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .6 3.2 2.5 3.5 5.2"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-uni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9 12 4l10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ BRAND BANNER (same as the dashboard header) ============ -->
+<div class="brandbar" role="banner">
+  <div class="wrap">
+    <div class="bb-left">
+      <img src="assets/darkvic-emblem-ice.svg" alt="">
+      <div>
+        <div class="bb-eyebrow"><b>Safer<span>Vic</span></b> project <a class="js-portfolio" href="../../index.html" hidden style="color:#C8DFF1;margin-left:10px;letter-spacing:.06em;text-transform:none">← All projects</a></div>
+        <div class="bb-title">Dark <span>Victoria</span></div>
+        <div class="bb-tag">Silence is uncertainty · not safety</div>
+        <div class="bb-src"><i class="live" aria-hidden="true"></i>ACMA RRL · AusNet · VicEmergency · ABS | Pilot: eastern Victoria, register collecting since 8 Sep 2026</div>
+      </div>
+    </div>
+    <div class="bb-right" aria-hidden="true">
+      <img class="circuit" src="assets/darkvic-neurons-radar-animated.png" alt="">
+      <img class="wordmark" src="assets/darkvic-wordmark.png" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero-shell">
+  <div class="hero" id="top">
+    <img class="hero-bg" alt="" fetchpriority="high"
+         src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_4bf5c92d-c255-4901-aa2b-1c62bbaafaf7.png">
+    <canvas class="fx" aria-hidden="true"></canvas>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <a class="logo" href="#top" aria-label="DarkVic home"><img src="assets/darkvic-emblem-ice.svg" alt="" width="40" height="40"><span aria-hidden="true">Dark<b>Vic</b></span></a>
+      <ul id="navlist">
+        <li><a href="#problem">The problem</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#dial">Try the dial</a></li>
+        <li><a href="#join">Join</a></li>
+        <li><a href="#cases">Case studies</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="call">
+        <a class="btn btn-ice js-dash" href="#live" aria-label="Open dashboard"><span class="ic"><svg><use href="#i-arrow"/></svg></span><span class="lbl" aria-hidden="true">Open dashboard</span></a>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navlist" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
+      </div>
+    </nav>
+
+    <div class="hero-body">
+      <div class="rating rv">
+        <span class="pill dark"><i class="live" aria-hidden="true"></i>Live prototype · AusNet pilot area, eastern Victoria</span>
+      </div>
+      <h1 class="rv d1">See where the signal goes dark <span class="mute">before anyone can report it</span></h1>
+      <p class="sub rv d2">When the power goes out, a mobile tower runs on its battery and then goes quiet. Nothing reports that silence. DarkVic infers probable communication blackouts across 770 Victorian towns from the evidence that survives.</p>
+      <div class="ctas rv d3">
+        <a class="btn btn-ice" href="#how"><span class="ic"><svg><use href="#i-arrow"/></svg></span>See how it works</a>
+        <a class="btn btn-ghost" href="#demo"><span class="ic"><svg><use href="#i-play"/></svg></span>Watch the demo</a>
+      </div>
+    </div>
+
+    <div class="hero-foot">
+      <div class="proof rv">
+        <div class="badge"><img src="assets/darkvic-emblem-navy.svg" alt=""></div>
+        <div><b>4,085 tower sites</b><small>from the ACMA licence register</small></div>
+        <div class="sep" aria-hidden="true"></div>
+        <div class="second"><b>15-minute</b><small>evidence refresh</small></div>
+      </div>
+      <div class="thumbs rv d1" aria-label="Case studies">
+        <a href="#case-storm"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181501_37713876-7528-495b-860b-f2f2d58c584c_min.webp" alt="" width="112" height="84"><span>Feb 2024 storms</span></a>
+        <a href="#case-quake"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_2a563613-9bc4-47b1-8848-3d5e021b184e_min.webp" alt="" width="112" height="84"><span>3 Oct M4.8</span></a>
+        <a href="#case-single"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181501_3e013c9c-3a33-4caf-ba04-001be356880b_min.webp" alt="" width="112" height="84"><span>One-tower towns</span></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ DATA SOURCES ============ -->
+<div class="sources">
+  <div class="wrap">
+    <h2 class="rv">Built entirely on open public data</h2>
+    <div class="src-row rv d1">
+      <div class="src"><svg><use href="#i-tower"/></svg><div>ACMA<small>Licence register</small></div></div>
+      <div class="src"><svg><use href="#i-bolt"/></svg><div>AusNet<small>Outage feed</small></div></div>
+      <div class="src"><svg><use href="#i-flame"/></svg><div>VicEmergency<small>Hazard feed</small></div></div>
+      <div class="src"><svg><use href="#i-map"/></svg><div>ABS<small>Localities 2021</small></div></div>
+      <div class="src"><svg><use href="#i-radar"/></svg><div>Geoscience Australia<small>Earthquakes</small></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" aria-labelledby="about-h">
+  <div class="wrap about-grid">
+    <div><span class="pill rv"><svg><use href="#i-spark"/></svg>About DarkVic</span></div>
+    <div>
+      <h2 id="about-h" class="rv">Power outages have a map. <span class="mute">Communication blackouts don't.</span></h2>
+      <div class="about-photos">
+        <div class="ph tall rv"><img loading="lazy" alt="A technician inspecting backup batteries in a cabinet at the base of a rural mobile tower" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181501_04dd3c6f-8fc0-4770-bd70-7348b72570a9.png"></div>
+        <div class="about-right">
+          <p class="rv d1">When a mobile tower loses mains power, its backup battery keeps it alive for a few hours. Then it goes silent, and that failure also takes out the path that would have reported it. To everyone outside, that silence looks exactly like "no news".</p>
+          <ul class="ticks rv d2">
+            <li><svg><use href="#i-check"/></svg>Reads mains-power loss from AusNet's public outage feed</li>
+            <li><svg><use href="#i-check"/></svg>Tracks hazards and exposure from VicEmergency</li>
+            <li><svg><use href="#i-check"/></svg>Reports a probable blackout, never a false certainty</li>
+          </ul>
+          <a class="btn btn-navy rv d3" href="#how" style="align-self:flex-start"><span class="ic"><svg><use href="#i-arrow"/></svg></span>Explore the method</a>
+          <div class="ph rv"><img loading="lazy" alt="Analysts in an emergency operations centre watching a map of Victoria on a video wall" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_7f4d52a4-037f-4124-b3ab-de2caa68c9ec.png"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE EVENT ============ -->
+<section class="band" id="event" aria-labelledby="event-h">
+  <img class="band-bg" loading="lazy" alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_2a563613-9bc4-47b1-8848-3d5e021b184e.png">
+  <div class="wrap">
+    <span class="pill dark rv"><svg><use href="#i-radar"/></svg>A real test</span>
+    <h2 id="event-h" class="rv d1">02:01 am, Saturday 3 October 2026. <span class="mute">The ground shook in Gippsland.</span></h2>
+    <div class="gstats">
+      <div class="gstat rv"><b>M 4.8</b><span>earthquake near Leongatha</span><small>Geoscience Australia, eastern Victoria</small></div>
+      <div class="gstat rv d1"><b data-count="2164" data-fmt="comma">2,164</b><span>felt reports</span><small>people reaching for their phones</small></div>
+      <div class="gstat rv d2"><b data-count="22" data-fmt="min">22 min</b><span>until it entered DarkVic's register</span><small>on the register at 02:23, captured automatically</small></div>
+    </div>
+    <p class="question rv">The shaking was real. What matters is the signal. If a tower had died that night, <em>who could still call for help?</em></p>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section id="problem" aria-labelledby="problem-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-alert"/></svg>The problem</span>
+      <h2 id="problem-h" class="rv d1">A dead tower <span class="mute">cannot report itself</span></h2>
+      <p class="lede rv d2">Power outages are published within minutes. Mobile blackouts aren't published at all. Carriers' battery figures are commercial-in-confidence, and the failure erases its own reporting path.</p>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><div class="sico"><svg><use href="#i-tower"/></svg></div>
+        <div><b data-count="4085" data-fmt="comma">4,085</b><span>candidate tower sites</span><small>ACMA licence register, AusNet pilot area</small></div></div>
+      <div class="stat rv d1"><div class="sico"><svg><use href="#i-pin"/></svg></div>
+        <div><b data-count="770">770</b><span>suburbs and towns</span><small>each with its own dependency area</small></div></div>
+      <div class="stat alert rv d2"><div class="sico"><svg><use href="#i-alert"/></svg></div>
+        <div><b data-count="34" data-fmt="pct">34%</b><span>depend on one tower</span><small>one failure silences the whole town</small></div></div>
+    </div>
+    <div class="diagram rv">
+      <div class="scroll-x">
+      <svg viewBox="0 0 940 124" role="img" aria-label="Timeline: mains power is lost and AusNet reports it; the tower runs on battery for an assumed 2, 4 or 8 hours; then the tower goes silent and nothing reports it, so silence looks like no news.">
+        <line x1="30" y1="68" x2="910" y2="68" stroke="#D5DEEA" stroke-width="3"/>
+        <circle cx="80" cy="68" r="11" fill="#527FA9"/>
+        <text x="80" y="32" fill="#123456" font-size="15" font-weight="bold" text-anchor="middle" font-family="Inter,Arial">mains power lost</text>
+        <text x="80" y="50" fill="#5B6577" font-size="12" text-anchor="middle" font-family="Inter,Arial">AusNet reports this</text>
+        <rect x="140" y="56" width="420" height="24" rx="12" fill="#EAF1F8"/>
+        <text x="350" y="73" fill="#344054" font-size="13" text-anchor="middle" font-family="Inter,Arial">battery carries the tower · endurance not public, assumed 2 / 4 / 8 h</text>
+        <circle cx="630" cy="68" r="11" fill="#CC3311"/>
+        <text x="630" y="32" fill="#CC3311" font-size="15" font-weight="bold" text-anchor="middle" font-family="Inter,Arial">the tower goes silent</text>
+        <text x="630" y="50" fill="#5B6577" font-size="12" text-anchor="middle" font-family="Inter,Arial">nothing reports this</text>
+        <rect x="690" y="44" width="220" height="48" rx="8" fill="none" stroke="#CC3311" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="800" y="64" fill="#344054" font-size="13" text-anchor="middle" font-family="Inter,Arial">silence looks exactly</text>
+        <text x="800" y="82" fill="#344054" font-size="13" text-anchor="middle" font-family="Inter,Arial">like &#8220;no news&#8221;</text>
+      </svg>
+      </div>
+      <p class="dlabel">The failure erases its own reporting path. DarkVic works from what is still observable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill rv"><svg><use href="#i-brain"/></svg>How it works</span>
+      <h2 id="how-h" class="rv d1">Reason from the evidence <span class="mute">that survives</span></h2>
+      <p class="lede rv d2">A pipeline that runs every 15 minutes. Everything on the map is pre-computed by it, so the dashboard never re-implements the logic.</p>
+    </div>
+    <div class="steps">
+      <article class="step rv"><span class="n">01</span><div class="sico"><svg><use href="#i-radar"/></svg></div><h3>Sense</h3><p>A Python poller collects AusNet outages and VicEmergency hazards every 15 minutes.</p></article>
+      <article class="step rv d1"><span class="n">02</span><div class="sico"><svg><use href="#i-db"/></svg></div><h3>Remember</h3><p>Every snapshot is kept in a versioned event register, so any moment can be replayed.</p></article>
+      <article class="step rv d2"><span class="n">03</span><div class="sico"><svg><use href="#i-brain"/></svg></div><h3>Reason</h3><p>Explicit rules infer each site's probable state, roll it up to towns and score confidence.</p></article>
+      <article class="step rv d3"><span class="n">04</span><div class="sico"><svg><use href="#i-map"/></svg></div><h3>Show</h3><p>A dashboard with two audience views, a replay, the live register and analysis tools.</p></article>
+    </div>
+
+    <div class="diagram rv" style="background:#fff">
+      <div class="scroll-x">
+      <svg viewBox="0 0 980 190" role="img" aria-label="Pipeline: AusNet outages and VicEmergency hazards feed a poller every 15 minutes, then a versioned register, then the rules R1–R5, A1–A5 and C1–C4, which output probable blackout.">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#527FA9"/></marker></defs>
+        <g font-family="Inter,Arial">
+        <rect x="10" y="20" width="170" height="52" rx="9" fill="#EAF1F8"/>
+        <text x="95" y="42" fill="#123456" font-size="14" font-weight="bold" text-anchor="middle">AusNet outages</text>
+        <text x="95" y="60" fill="#5B6577" font-size="11" text-anchor="middle">mains-loss evidence</text>
+        <rect x="10" y="112" width="170" height="52" rx="9" fill="#EAF1F8"/>
+        <text x="95" y="134" fill="#123456" font-size="14" font-weight="bold" text-anchor="middle">VicEmergency</text>
+        <text x="95" y="152" fill="#5B6577" font-size="11" text-anchor="middle">hazards · exposure</text>
+        <line x1="180" y1="46" x2="248" y2="82" stroke="#527FA9" stroke-width="2.5" marker-end="url(#ar)"/>
+        <line x1="180" y1="138" x2="248" y2="104" stroke="#527FA9" stroke-width="2.5" marker-end="url(#ar)"/>
+        <rect x="252" y="66" width="160" height="56" rx="9" fill="#123456"/>
+        <text x="332" y="88" fill="#FFFFFF" font-size="14" font-weight="bold" text-anchor="middle">poller</text>
+        <text x="332" y="107" fill="#C8DFF1" font-size="11" text-anchor="middle">every 15 minutes</text>
+        <line x1="412" y1="94" x2="470" y2="94" stroke="#527FA9" stroke-width="2.5" marker-end="url(#ar)"/>
+        <rect x="474" y="66" width="170" height="56" rx="9" fill="#123456"/>
+        <text x="559" y="88" fill="#FFFFFF" font-size="14" font-weight="bold" text-anchor="middle">versioned register</text>
+        <text x="559" y="107" fill="#C8DFF1" font-size="11" text-anchor="middle">every snapshot kept</text>
+        <line x1="644" y1="94" x2="702" y2="94" stroke="#527FA9" stroke-width="2.5" marker-end="url(#ar)"/>
+        <rect x="706" y="66" width="130" height="56" rx="9" fill="#123456"/>
+        <text x="771" y="88" fill="#FFFFFF" font-size="14" font-weight="bold" text-anchor="middle">rules</text>
+        <text x="771" y="107" fill="#C8DFF1" font-size="11" text-anchor="middle">R1–R5 · A1–A5 · C1–C4</text>
+        <line x1="836" y1="94" x2="894" y2="94" stroke="#527FA9" stroke-width="2.5" marker-end="url(#ar)"/>
+        <rect x="898" y="60" width="72" height="68" rx="9" fill="#FBEAE5" stroke="#CC3311" stroke-width="1.5"/>
+        <text x="934" y="88" fill="#CC3311" font-size="13" font-weight="bold" text-anchor="middle">probable</text>
+        <text x="934" y="106" fill="#CC3311" font-size="13" font-weight="bold" text-anchor="middle">blackout</text>
+        </g>
+      </svg>
+      </div>
+    </div>
+
+    <div class="rules">
+      <div class="rule rv"><b>R1–R5</b><div class="t">Site rules</div><p>One site's probable state, from mains loss and the time elapsed since.</p></div>
+      <div class="rule rv d1"><b>A1–A5</b><div class="t">Aggregation rules</div><p>Sites roll up into a suburb or town verdict through their dependency areas.</p></div>
+      <div class="rule rv d2"><b>C1–C4</b><div class="t">Confidence rules</div><p>How fresh and consistent the evidence is, shown next to every verdict.</p></div>
+    </div>
+    <div class="principle rv"><svg><use href="#i-shield"/></svg>The system reports probable blackout, never certainty. No evidence is not the same as safe.</div>
+  </div>
+</section>
+
+<!-- ============ INTERACTIVE BATTERY DIAL ============ -->
+<section id="dial" aria-labelledby="dial-h">
+  <div class="wrap dial">
+    <div>
+      <span class="pill rv"><svg><use href="#i-clock"/></svg>Try it yourself</span>
+      <h2 id="dial-h" class="rv d1" style="margin-top:16px">Same event, one dial. <span class="mute">It moves <em>when</em>, never <em>whether</em>.</span></h2>
+      <p class="lede rv d2" style="margin-top:14px">Battery endurance isn't public, so DarkVic carries it as one visible assumption of 2, 4 or 8 hours, and never invents per-site figures. Choose an assumption and move time forward from the moment mains power is lost.</p>
+      <p class="rv d3" style="margin-top:14px;color:var(--dim);font-size:.92rem">A simplified illustration of the real state model (rules R3–R5 for sites, A2–A4 for towns) using two example towns, not live data.</p>
+    </div>
+
+    <div class="panel rv" role="group" aria-labelledby="dial-h">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-weight:600;color:var(--navy)" id="assume-l">Battery assumption</span>
+        <div class="seg" role="group" aria-labelledby="assume-l">
+          <button type="button" data-h="2" aria-pressed="false">2 h</button>
+          <button type="button" data-h="4" aria-pressed="true">4 h</button>
+          <button type="button" data-h="8" aria-pressed="false">8 h</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <label for="hrs">Time since mains power lost <output id="hrsOut" for="hrs">3.0 h</output></label>
+        <input type="range" id="hrs" min="0" max="12" step="0.5" value="3">
+      </div>
+      <div class="timeline" aria-hidden="true">
+        <div class="tl-batt" id="tlBatt" style="width:33.3%"></div>
+        <div class="tl-dark"></div>
+        <div class="tl-mark" id="tlMark" style="left:25%"></div>
+      </div>
+      <div class="tl-scale" aria-hidden="true"><span>0 h · mains lost</span><span>6 h</span><span>12 h</span></div>
+      <div class="legend" aria-hidden="true"><span><i style="background:repeating-linear-gradient(135deg,#9FC0DE 0 4px,#B6D0E8 4px 8px)"></i>assumed battery window</span><span><i style="background:var(--navy)"></i>probably dark</span><span><i style="background:var(--red)"></i>now</span></div>
+
+      <div class="verdicts" aria-live="polite">
+        <div class="verdict" id="vA" data-s="batt">
+          <div class="town">Town A · 1 tower, mains lost</div>
+          <div class="state"><svg><use href="#i-clock"/></svg><span>On assumed battery</span></div>
+          <p></p>
+        </div>
+        <div class="verdict" id="vB" data-s="ok">
+          <div class="town">Town B · 3 towers, 1 lost mains</div>
+          <div class="state"><svg><use href="#i-check"/></svg><span>Available</span></div>
+          <p></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AUDIENCES (testimonial-style) ============ -->
+<section class="aud" id="audiences" aria-labelledby="aud-h">
+  <div class="wrap">
+    <div class="aud-head">
+      <div>
+        <span class="pill rv"><svg><use href="#i-users"/></svg>Who it's for</span>
+        <h2 id="aud-h" class="rv d1" style="margin-top:16px">The questions <span class="mute">it is built to answer</span></h2>
+      </div>
+      <p class="lede rv d2" style="max-width:420px">Two audiences are already served by the dashboard, and the community is the reason both of them matter.</p>
+    </div>
+    <div class="aud-grid">
+      <figure class="qcard rv">
+        <div class="qmark"><svg><use href="#i-quote"/></svg></div>
+        <blockquote>"Which towns hang on a single tower, and where should backup investment go first?"</blockquote>
+        <p class="ans">Planning view: structural fragility ranked before an event.</p>
+        <figcaption class="who"><span class="av"><svg><use href="#i-chart"/></svg></span><span><b>Network planning manager</b><small>AusNet · before the event</small></span></figcaption>
+      </figure>
+      <figure class="qcard feat rv d1">
+        <div class="qmark"><svg><use href="#i-quote"/></svg></div>
+        <blockquote>"Right now, which towns have probably lost the ability to call for help, and how sure are we?"</blockquote>
+        <p class="ans">Intelligence view: the latest inferred state with its confidence.</p>
+        <figcaption class="who"><span class="av"><svg><use href="#i-eye"/></svg></span><span><b>Intelligence officer</b><small>State Control Centre · during the event</small></span></figcaption>
+      </figure>
+      <figure class="qcard rv d2">
+        <div class="qmark"><svg><use href="#i-quote"/></svg></div>
+        <blockquote>"If the tower fails tonight, can anyone in my town still reach triple zero?"</blockquote>
+        <p class="ans">The person every verdict is ultimately about.</p>
+        <figcaption class="who"><span class="av"><img loading="lazy" alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_57c695f9-2a04-4983-8247-46eba8399df1_min.webp"></span><span><b>Rural resident</b><small>Single-tower town</small></span></figcaption>
+      </figure>
+    </div>
+    <p class="persona-note">These are illustrative user personas used to design the views, not endorsements.</p>
+  </div>
+</section>
+
+<!-- ============ CASE STUDIES (blog-style) ============ -->
+<section id="cases" aria-labelledby="cases-h">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill rv"><svg><use href="#i-chart"/></svg>Case studies</span>
+      <h2 id="cases-h" class="rv d1">Two events, <span class="mute">replayed honestly</span></h2>
+    </div>
+    <div class="cases">
+      <article class="case rv" id="case-storm">
+        <div class="img"><img loading="lazy" alt="Collapsed transmission towers in a paddock under storm clouds" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181501_37713876-7528-495b-860b-f2f2d58c584c.png"></div>
+        <div class="body">
+          <div class="meta"><span class="tag">Reconstruction</span><span>13 February 2024</span></div>
+          <h3>The February 2024 storms</h3>
+          <p>An encoded reconstruction of a real storm, built from the Network Outage Review. It shows what DarkVic would have inferred: towns turn to probable blackout as their backup windows expire, single-tower towns first. It is a replay, not validation against observed communications data.</p>
+          <div class="kpis"><div><b>Act 1</b><small>of the demo</small></div><div><b>2 / 4 / 8 h</b><small>compared side by side</small></div></div>
+          <a class="more js-dash" href="#live">Open the replay <svg><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <article class="case rv d1" id="case-quake">
+        <div class="img"><img loading="lazy" alt="A country town main street at night, a person holding a glowing phone" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_2a563613-9bc4-47b1-8848-3d5e021b184e.png"></div>
+        <div class="body">
+          <div class="meta"><span class="tag red">Live event</span><span>3 October 2026</span></div>
+          <h3>The M4.8 near Leongatha</h3>
+          <p>The quake reached the register at 02:23, 22 minutes after it struck. 19 sites in 12 towns within 15 km were exposed, but no mains-loss evidence followed, so DarkVic recorded the exposure and inferred no blackout. It stayed honest under a live event.</p>
+          <div class="kpis"><div><b>19</b><small>sites in 12 towns</small></div><div><b>0</b><small>mains-loss reports</small></div><div><b>22 min</b><small>to register</small></div></div>
+          <a class="more js-dash" href="#live">See the live register <svg><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <article class="case rv d2" id="case-single">
+        <div class="img"><img loading="lazy" alt="Aerial view of a regional town at twilight, half of it in darkness" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181501_3e013c9c-3a33-4caf-ba04-001be356880b.png"></div>
+        <div class="body">
+          <div class="meta"><span class="tag steel">Planning</span><span>Structural analysis</span></div>
+          <h3>One tower, one town</h3>
+          <p>Around a third of the 770 localities depend on a single tower's dependency area. They are the first to fall silent in any outage, and the planning view ranks them before the next event arrives.</p>
+          <div class="kpis"><div><b>34%</b><small>single-tower towns</small></div><div><b>770</b><small>localities ranked</small></div></div>
+          <a class="more js-dash" href="#live">Explore fragility <svg><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMO ============ -->
+<section class="demo" id="demo" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill dark rv"><svg><use href="#i-play"/></svg>The system, live</span>
+      <h2 id="demo-h" class="rv d1">Two events, <span class="mute">ninety seconds</span></h2>
+    </div>
+    <div class="video rv">
+      <video id="demoVid" controls preload="metadata" playsinline
+             poster="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181502_7f4d52a4-037f-4124-b3ab-de2caa68c9ec.png">
+        <source src="assets/darkvic_demo.mp4" type="video/mp4">
+        <source src="presentation/assets/darkvic_demo.mp4" type="video/mp4">
+      </video>
+      <div class="vid-missing" id="vidMissing"><p>Demo recording coming soon.<br>Save it as <code>website/assets/darkvic_demo.mp4</code> and reload.</p></div>
+    </div>
+    <div class="acts">
+      <div class="act rv"><b>Act 1 · the Feb 2024 storms</b>The reconstructed replay turns red in fragility order as the backup windows expire.</div>
+      <div class="act rv d1"><b>Act 2 · the 3 Oct M4.8</b>19 sites exposed, zero mains-loss evidence, and no blackout claimed.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD PREVIEW ============ -->
+<section id="dashboard" aria-labelledby="dash-h" style="background:var(--ice-50)">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill rv"><svg><use href="#i-map"/></svg>The dashboard</span>
+      <h2 id="dash-h" class="rv d1">One map, <span class="mute">two audiences, every assumption visible</span></h2>
+      <p class="lede rv d2">The Shiny dashboard is where the register, the rules and the map meet. Choose a backup assumption, search a suburb, switch between the planning and intelligence views, and read the reasoning behind every state.</p>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi rv"><small>Candidate mobile sites</small><b>4,085</b><span>ACMA RRL, pilot area</span></div>
+      <div class="kpi rv d1"><small>Pilot suburbs and towns</small><b>770</b><span>ABS SAL 2021</span></div>
+      <div class="kpi warn rv d2"><small>Single-site towns</small><b>260 (34%)</b><span>one damaged site = probable blackout</span></div>
+      <div class="kpi alert rv d3"><small>Outage events</small><b>119</b><span>224 towns, since 8 Sep 2026</span></div>
+    </div>
+    <p class="dlabel center rv" style="margin:-12px 0 24px">As at the 3 Oct 2026, 23:30 assessment, with 706 VicEmergency hazards mapped over the previous ~3 days. Counts refresh with each export; the 34% ratio is stable.</p>
+    <figure class="browser rv" id="dashFrame">
+      <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span id="dashBarUrl">DarkVic · Dark Victoria dashboard</span></div>
+      <div class="embed-cover" id="embedCover" hidden>
+        <button type="button" class="btn btn-ice" id="embedBtn"><span class="ic"><svg><use href="#i-play"/></svg></span>Load the live dashboard here</button>
+      </div>
+      <img id="dashShot" loading="lazy" src="assets/dashboard-preview.png" width="1673" height="1039"
+           alt="The DarkVic dashboard: KPI cards, a map of eastern Victoria coloured by sites per locality with VicEmergency hazards, the backup assumption selector and the help panel.">
+    </figure>
+    <div class="views rv" aria-label="Dashboard views">
+      <span>Explore</span><span>Replay: 13 Feb 2024</span><span>Live register</span><span>Analyse</span><span>About the Data</span><span>Guided tour</span>
+    </div>
+    <div class="center rv" style="margin-top:28px">
+      <a class="btn btn-navy js-dash" href="#live"><span class="ic"><svg><use href="#i-arrow"/></svg></span><span class="js-dash-label">Open the dashboard</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEVEN LAYERS ============ -->
+<section id="layers" aria-labelledby="layers-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-net"/></svg>Digital infrastructure</span>
+      <h2 id="layers-h" class="rv d1">Seven layers, <span class="mute">one working system</span></h2>
+      <p class="lede rv d2">Every layer of the subject is a working component here, not a proposal.</p>
+    </div>
+    <div class="layers">
+      <div class="layer rv"><span class="num">1</span><div><h3>Sensing</h3><p>A 15-minute Python poller over the AusNet and VicEmergency feeds.</p></div></div>
+      <div class="layer rv d1"><span class="num">2</span><div><h3>Transport</h3><p>Scheduled HTTPS collection of public feeds into the project archive.</p></div></div>
+      <div class="layer rv d2"><span class="num">3</span><div><h3>Storage</h3><p>A timestamped snapshot archive plus a cumulative outage event register.</p></div></div>
+      <div class="layer rv"><span class="num">4</span><div><h3>Processing</h3><p>The R1–R5, A1–A5 and C1–C4 state model and the export pipeline.</p></div></div>
+      <div class="layer rv d1"><span class="num">5</span><div><h3>Interface</h3><p>The dashboard: two audience views, replay, live register, analysis and accessibility.</p></div></div>
+      <div class="layer rv d2"><span class="num">6</span><div><h3>Governance</h3><p>Visible assumptions, honesty statements, data licensing and AI disclosure.</p></div></div>
+      <div class="layer rv"><span class="num">7</span><div><h3>Sustainability</h3><p>Polite polling of open feeds and additive scaling to all five distributors.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCALE + LIMITS ============ -->
+<section class="limits" id="limits" aria-labelledby="limits-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-shield"/></svg>What it means</span>
+      <h2 id="limits-h" class="rv d1">Built to scale, <span class="mute">honest about limits</span></h2>
+    </div>
+    <div class="diagram rv" style="background:#fff;margin-top:0">
+      <div class="scroll-x">
+      <svg viewBox="0 0 980 86" role="img" aria-label="Victoria's five electricity distributors: AusNet is piloted; Powercor, CitiPower, Jemena and United Energy each need one more poller.">
+        <g font-family="Inter,Arial">
+        <rect x="10" y="16" width="180" height="54" rx="9" fill="#123456"/>
+        <text x="100" y="40" fill="#FFFFFF" font-size="15" font-weight="bold" text-anchor="middle">AusNet</text>
+        <text x="100" y="58" fill="#C8DFF1" font-size="11" text-anchor="middle">piloted · eastern Vic</text>
+        <g fill="none" stroke="#527FA9" stroke-width="1.5" stroke-dasharray="6 5">
+          <rect x="205" y="16" width="180" height="54" rx="9"/><rect x="400" y="16" width="180" height="54" rx="9"/>
+          <rect x="595" y="16" width="180" height="54" rx="9"/><rect x="790" y="16" width="180" height="54" rx="9"/>
+        </g>
+        <g fill="#123456" font-size="14" font-weight="bold" text-anchor="middle">
+          <text x="295" y="40">Powercor</text><text x="490" y="40">CitiPower</text>
+          <text x="685" y="40">Jemena</text><text x="880" y="40">United Energy</text>
+        </g>
+        <g fill="#5B6577" font-size="11" text-anchor="middle">
+          <text x="295" y="58">add a poller</text><text x="490" y="58">add a poller</text>
+          <text x="685" y="58">add a poller</text><text x="880" y="58">add a poller</text>
+        </g>
+        </g>
+      </svg>
+      </div>
+      <p class="dlabel">Going statewide means four more pollers, not a new system. The rules, register and map all stay the same. <a href="#join" style="color:var(--steel-700);font-weight:600">Distributors: join the network →</a></p>
+    </div>
+    <div class="cols">
+      <div class="col scale rv"><h3><svg><use href="#i-net"/></svg>At scale</h3>
+        <p><b>Two audiences already served.</b> A State Control Centre intelligence view during the event, and an AusNet planning view before it.</p>
+        <p><b>Accessible by design.</b> A colour-blind-safe palette, adjustable text size, a guided tour and a plain-language glossary.</p></div>
+      <div class="col honest rv d1"><h3><svg><use href="#i-shield"/></svg>Honest limits</h3>
+        <p><b>One distributor piloted.</b> Eastern Victoria only, by design.</p>
+        <p><b>Battery endurance is assumed, not known.</b> The assumption is always on screen.</p>
+        <p><b>Inference never carries the authority of observation.</b> This is an educational prototype, not an operational system.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOIN THE NETWORK ============ -->
+<section id="join" aria-labelledby="join-h">
+  <div class="wrap">
+    <div class="join-top">
+      <div>
+        <span class="pill rv"><svg><use href="#i-net"/></svg>Join the network</span>
+        <h2 id="join-h" class="rv d1" style="margin-top:16px">One distributor today. <span class="mute">Five is four pollers away.</span></h2>
+        <p class="lede rv d2" style="margin-top:14px">Victoria's power network is split between five distributors. Each one that shares its public outage feed extends DarkVic's coverage to every tower and town in its area, using the same rules, register and map, with no new system to build.</p>
+        <div class="dist-pick rv d3" role="group" aria-label="Choose a distributor">
+          <button type="button" class="is-live" data-d="ausnet" aria-pressed="true">AusNet</button>
+          <button type="button" data-d="powercor" aria-pressed="false">Powercor</button>
+          <button type="button" data-d="citipower" aria-pressed="false">CitiPower</button>
+          <button type="button" data-d="jemena" aria-pressed="false">Jemena</button>
+          <button type="button" data-d="united" aria-pressed="false">United Energy</button>
+        </div>
+      </div>
+      <div class="dist-card rv" id="distCard" aria-live="polite">
+        <span class="status is-live" id="dStatus"><svg><use href="#i-check"/></svg><span>Live pilot</span></span>
+        <h3 id="dName">AusNet Services</h3>
+        <p id="dText">The pilot. Outages have been polled every 15 minutes since 8 Sep 2026 and assessed against 4,085 candidate sites in 770 suburbs and towns.</p>
+        <dl>
+          <dt>Service area</dt><dd id="dArea">Eastern Victoria and Melbourne's outer east</dd>
+          <dt>What it takes</dt><dd id="dNeed">Already connected</dd>
+        </dl>
+        <a class="btn btn-navy" href="#eoi" id="dCta" style="margin-top:18px"><span class="ic"><svg><use href="#i-arrow"/></svg></span><span>Register interest</span></a>
+      </div>
+    </div>
+
+    <div class="onboard">
+      <div class="ob rv"><span class="num">1</span><h3>Express interest</h3><p>Tell us who you are and which network area you cover, using the form below.</p></div>
+      <div class="ob rv d1"><span class="num">2</span><h3>Share a public feed</h3><p>Point us to the outage feed you already publish. No private data and no new system on your side.</p></div>
+      <div class="ob rv d2"><span class="num">3</span><h3>Add one poller</h3><p>A new 15-minute poller feeds the same versioned register. The rules R1–R5, A1–A5 and C1–C4 stay unchanged.</p></div>
+      <div class="ob rv d3"><span class="num">4</span><h3>Your area goes on the map</h3><p>Your towns appear in both the planning and intelligence views, with the same honesty statements.</p></div>
+    </div>
+
+    <div class="join-form-wrap">
+      <div class="needs rv">
+        <h3>What a feed needs</h3>
+        <ul>
+          <li><svg><use href="#i-pin"/></svg>The affected area of each outage, as polygons or a suburb or postcode list</li>
+          <li><svg><use href="#i-clock"/></svg>A start time, plus status updates when supply is restored</li>
+          <li><svg><use href="#i-radar"/></svg>A refresh at least every 15 minutes, machine-readable (JSON or GeoJSON)</li>
+          <li><svg><use href="#i-shield"/></svg>Public, or licensed for reuse with attribution</li>
+        </ul>
+        <p class="fine">DarkVic is an educational prototype. An expression of interest is a conversation, not a service agreement, and no operational commitment is implied.</p>
+      </div>
+
+      <form class="eoi rv d1" id="eoi" novalidate aria-labelledby="eoi-h">
+        <h3 id="eoi-h" style="margin-bottom:18px">Expression of interest</h3>
+        <div class="fgrid2">
+          <div class="field" id="f-org">
+            <label for="org">Organisation <span class="req" aria-hidden="true">*</span></label>
+            <select id="org" name="org" required aria-describedby="org-err">
+              <option value="">Select…</option>
+              <option>AusNet Services</option>
+              <option>Powercor</option>
+              <option>CitiPower</option>
+              <option>Jemena</option>
+              <option>United Energy</option>
+              <option>Mobile network operator</option>
+              <option>Emergency management agency</option>
+              <option>Other</option>
+            </select>
+            <span class="err" id="org-err">Choose your organisation.</span>
+          </div>
+          <div class="field" id="f-name">
+            <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+            <input id="name" name="name" autocomplete="name" required aria-describedby="name-err">
+            <span class="err" id="name-err">Enter your name.</span>
+          </div>
+          <div class="field" id="f-email">
+            <label for="email">Work email <span class="req" aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-err">
+            <span class="err" id="email-err">Enter a valid email, like name@organisation.com.au.</span>
+          </div>
+          <div class="field">
+            <label for="role">Role</label>
+            <input id="role" name="role" autocomplete="organization-title">
+          </div>
+          <div class="field full">
+            <label for="feed">Public outage feed URL</label>
+            <input id="feed" name="feed" type="url" inputmode="url" aria-describedby="feed-help">
+            <span class="help" id="feed-help">Optional. The page or endpoint where your outage data is published.</span>
+          </div>
+          <fieldset class="field full">
+            <legend>I'm interested in</legend>
+            <div class="checks">
+              <label><input type="checkbox" name="want" value="Connecting our outage feed">Connecting our outage feed</label>
+              <label><input type="checkbox" name="want" value="A pilot in our network area">A pilot in our network area</label>
+              <label><input type="checkbox" name="want" value="Access to the planning view">Access to the planning view</label>
+              <label><input type="checkbox" name="want" value="A briefing on the method">A briefing on the method</label>
+            </div>
+          </fieldset>
+          <div class="field full">
+            <label for="msg">Anything else</label>
+            <textarea id="msg" name="msg"></textarea>
+          </div>
+        </div>
+        <div class="form-foot">
+          <small>This opens your email app with the request ready to send to the project author. Nothing is stored on this site.</small>
+          <button class="btn btn-navy" type="submit"><span class="ic"><svg><use href="#i-arrow"/></svg></span>Prepare my request</button>
+        </div>
+        <div class="form-msg" id="formMsg" role="status" tabindex="-1"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ METHOD + DATA ============ -->
+<section id="method" aria-labelledby="method-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="pill rv"><svg><use href="#i-db"/></svg>Method and data</span>
+      <h2 id="method-h" class="rv d1">Transparent sources, <span class="mute">reproducible steps</span></h2>
+      <p class="lede rv d2">Every assumption lives in one configuration file, every state-model rule has a unit test, and every input below is an open public source.</p>
+    </div>
+    <div class="method-grid">
+      <div class="tbl rv">
+        <table>
+          <thead><tr><th scope="col">Source</th><th scope="col">Used for</th><th scope="col">Refresh / version</th></tr></thead>
+          <tbody>
+            <tr><td>ACMA Register of Radiocommunications Licences</td><td>4,085 candidate mobile-band sites in the pilot area</td><td>Extract 26 Aug 2026 · CC BY 4.0</td></tr>
+            <tr><td>AusNet Services outage information</td><td>Mains-power loss evidence</td><td>Polled every 15 min since 8 Sep 2026 · publicly available, attributed, remains the publisher's</td></tr>
+            <tr><td>VicEmergency feed</td><td>Hazards and exposure</td><td>Polled every 15 min, snapshots archived · same terms</td></tr>
+            <tr><td>ABS Suburbs and Localities 2021</td><td>770 dependency boundaries (suburbs and towns)</td><td>CC BY 4.0</td></tr>
+            <tr><td>Geoscience Australia</td><td>Earthquake details, 3 Oct 2026</td><td>Event record</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="side-cards">
+        <div class="side rv d1"><h3><svg><use href="#i-check"/></svg>Verification</h3>
+          <ul><li>Unit tests for every state-model rule</li><li>Sites sanity-checked in QGIS</li><li>A reconstructed replay of the Feb 2024 storms (not ground-truth validation)</li><li>A live event, handled without over-claiming</li></ul></div>
+        <div class="side rv d2"><h3><svg><use href="#i-eye"/></svg>Accessibility</h3>
+          <p>Colour is never the only signal: every state also carries an icon and a label. The site supports keyboard navigation and visible focus, and respects reduced-motion settings.</p></div>
+        <div class="side rv d3"><h3><svg><use href="#i-spark"/></svg>AI disclosure</h3>
+          <p>Generative AI (Claude) assisted with code and design; the inference model, data choices and content are the author's. Scene and section imagery was generated with Higgsfield AI. The logo concept was explored with AI image generation and produced as vector geometry.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEAM + FAQ ============ -->
+<section class="aud" id="faq" aria-labelledby="faq-h">
+  <div class="wrap team-grid">
+    <div class="profile rv">
+      <img class="neur" src="assets/darkvic-neurons-radar-animated.png" alt="" loading="lazy">
+      <div class="mark"><img src="assets/darkvic-emblem-navy.svg" alt=""></div>
+      <h3>Ahmed Alameri</h3>
+      <div class="role">Designer and developer, DarkVic</div>
+      <p>An individual project for GEOM30012 Digital Infrastructure Systems Capstone. Its working title was <i>Dark-Area Vic</i>, after the method it uses: dark-area inference.</p>
+      <dl>
+        
+        <dt>Group</dt><dd>Group 6 (ACE)</dd>
+        <dt>Institution</dt><dd>The University of Melbourne</dd>
+        <dt>Year</dt><dd>2026</dd>
+        <dt>Contact</dt><dd><a href="mailto:alameria@student.unimelb.edu.au" style="color:var(--ice);overflow-wrap:anywhere">alameria@student.unimelb.edu.au</a></dd>
+      </dl>
+    </div>
+    <div>
+      <span class="pill rv"><svg><use href="#i-quote"/></svg>FAQ</span>
+      <h2 id="faq-h" class="rv d1" style="margin:16px 0 20px">Questions <span class="mute">worth asking</span></h2>
+      <div class="faq rv d2">
+        <details><summary>Why not use the real battery figures?</summary>
+          <div class="a">Carriers treat battery endurance as commercial-in-confidence. Rather than invent per-site numbers, DarkVic carries one visible assumption (2, 4 or 8 hours) and shows how the answer moves with it.</div></details>
+        <details><summary>Has it been validated against real blackouts?</summary>
+          <div class="a">Not yet. Carriers' outage data isn't public, so comparison against ground-truth observations is the natural next step. So far there are two episodes: a reconstructed replay of the February 2024 storms, showing what DarkVic would have inferred, and the live 3 October 2026 earthquake, where it recorded exposure but inferred no blackout because no mains-loss evidence followed.</div></details>
+        <details><summary>Can it cover all of Victoria?</summary>
+          <div class="a">Yes, additively. Victoria has five electricity distributors and AusNet is piloted, so statewide coverage means four more pollers with the same rules, register and map.</div></details>
+        <details><summary>Is this an operational emergency system?</summary>
+          <div class="a">No. It's an educational prototype. Inference never carries the authority of observation, and every verdict says "probable" for exactly that reason.</div></details>
+        <details><summary>What does "no evidence" mean on the map?</summary>
+          <div class="a">Exactly that: uncertainty, not safety. Silence from a tower can mean it's fine or that it can no longer report, and DarkVic never paints silence as green.</div></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SAFERVIC FAMILY ============ -->
+<section class="family" id="safervic" aria-labelledby="sv-h">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill rv"><svg><use href="#i-shield"/></svg>The SaferVic family</span>
+      <img class="sv-logo rv d1" src="assets/safervic-wordmark.png" alt="SaferVic" width="1148" height="539" loading="lazy">
+      <h2 id="sv-h" class="rv d1">DarkVic is part of SaferVic</h2>
+      <p class="sv-motto rv d2">Better Data · Faster Decisions · Safer Future</p>
+      <p class="lede rv d2">SaferVic brings together open-data tools that help Victorians see risk more clearly. Each project takes a different kind of risk, shares the same design language, and holds to the same honesty about what the data can and cannot say.</p>
+    </div>
+    <div class="fam-grid">
+      <article class="prod rv">
+        <span class="ptag">Public safety</span>
+        <div class="pname">Crime<span>Vic</span></div>
+        <p>Where crime, disadvantage and police coverage meet. Recorded incidents for all 79 Victorian council areas and their suburbs, years ending March 2017 to 2026, set against SEIFA disadvantage and the reach of 325 police stations. It shows where crime is disproportionate per resident, not merely large by count.</p>
+        <ul class="ticks" style="font-size:.9rem">
+          <li><svg><use href="#i-users"/></svg>For council community safety officers and Victoria Police divisional planners</li>
+          <li><svg><use href="#i-check"/></svg>Aligned with UN SDGs 5, 10, 11 and 16</li>
+        </ul>
+        <div class="pmeta">GEOM90007 Information Visualisation · first released as SaferVic · data: Crime Statistics Agency, ABS, Vicmap</div>
+        <a class="more" id="crimeLink" href="#safervic" aria-disabled="true">Link coming soon <svg><use href="#i-arrow"/></svg></a>
+      </article>
+      <article class="prod here rv d1" aria-current="page">
+        <span class="here-tag">You are here</span>
+        <span class="ptag">Communications resilience</span>
+        <div class="pname">Dark<span>Vic</span></div>
+        <p>Where the signal goes dark. Infers probable mobile communication blackouts across 770 towns in eastern Victoria from the evidence that survives a disaster: power outages, hazards and dependence on a single tower.</p>
+        <ul class="ticks" style="font-size:.9rem">
+          <li><svg><use href="#i-users"/></svg>For State Control Centre intelligence officers and AusNet planning managers</li>
+          <li><svg><use href="#i-check"/></svg>Polls live public feeds every 15 minutes</li>
+        </ul>
+        <div class="pmeta">GEOM30012 Digital Infrastructure Systems Capstone · data: ACMA, AusNet, VicEmergency, ABS</div>
+        <a class="more" href="#how">How it works <svg><use href="#i-arrow"/></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / LIVE ============ -->
+<div class="cta-wrap" id="live">
+  <div class="wrap">
+    <div class="cta rv">
+      <img class="bg" loading="lazy" alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3KEXbfG7OvLvS1cPxfbDZXvNdcb/hf_20261004_181501_03a97b72-3f6d-4e05-8ffb-5216644b6e58.png">
+      <div>
+        <h2>Silence is uncertainty, <span class="mute">not safety.</span></h2>
+        <p>See what DarkVic is saying right now. Open the dashboard, or scan the code to bring it up on your phone.</p>
+        <div class="ctas">
+          <a class="btn btn-ice js-dash" href="#live"><span class="ic"><svg><use href="#i-arrow"/></svg></span><span class="js-dash-label">Open the dashboard</span></a>
+          <a class="btn btn-ghost" href="present/index.html"><span class="ic"><svg><use href="#i-play"/></svg></span>View the presentation</a>
+        </div>
+      </div>
+      <div class="qr" id="qr">QR code appears once the dashboard link is set</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap"><img class="fcircuit" src="assets/darkvic-circuit-wide.webp" alt="" loading="lazy" width="2000" height="370"></div>
+  <div class="wrap fgrid">
+    <div>
+      <a class="logo" href="#top" aria-label="DarkVic home"><img src="assets/darkvic-wordmark-final-v3.png" alt="DarkVic" width="174" height="72"></a>
+      <p>DarkVic infers probable communication blackouts across Victoria from the evidence that survives a disaster.</p>
+      <p style="font-style:italic;color:var(--steel-700);margin-top:10px">where the signal goes dark</p>
+      <a href="#safervic" style="display:inline-flex;align-items:center;gap:10px;margin-top:16px;text-decoration:none;color:var(--dim);font-size:.85rem">Part of <img src="assets/safervic-wordmark.png" alt="SaferVic" width="96" height="45" loading="lazy" style="height:36px;width:auto"></a>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#problem">The problem</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#dial">Battery dial</a></li>
+        <li><a href="#cases">Case studies</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Project</h4>
+      <ul>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="present/index.html">Presentation</a></li>
+        <li><a href="#method">Method and data</a></li>
+        <li><a href="#layers">Seven layers</a></li>
+        <li><a href="#join">Join the network</a></li>
+        <li><a href="#safervic">SaferVic family</a></li>
+        <li class="js-portfolio" hidden><a href="../../index.html">All projects</a></li>
+        <li id="contactLi" hidden><a id="contactA" href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>System schedule</h4>
+      <div class="sched">
+        <div><span>Feed polling</span><b>every 15 min</b></div>
+        <div><span>Event register</span><b>continuous</b></div>
+        <div><span>Pilot area</span><b>AusNet, eastern Vic</b></div>
+        <div><span>Battery assumption</span><b>2 / 4 / 8 h</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap fbot">
+    <span>© 2026 DarkVic · Ahmed Alameri · GEOM30012, The University of Melbourne. An educational prototype, not an operational system.</span>
+    <span>Data: ACMA RRL, AusNet, VicEmergency, ABS, Geoscience Australia. Imagery: Higgsfield AI.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script>
+  /* ---------- settings: fill these in ---------- */
+  var DASHBOARD_URL = 'https://alameri.shinyapps.io/darkvic/';
+  var CONTACT_EMAIL = 'alameria@student.unimelb.edu.au';
+  var CRIMEVIC_URL = '';    // CrimeVic dashboard link, when available
+
+  /* inside the portfolio (projects/darkvic/): show the way back, and link CrimeVic's own page */
+  if (/\/projects\/[^/]+\/(index\.html)?$/.test(location.pathname)) {
+    document.querySelectorAll('.js-portfolio').forEach(function (a) { a.hidden = false; });
+    if (!CRIMEVIC_URL) {
+      var cp = document.getElementById('crimeLink');
+      cp.href = '../crimevic/index.html'; cp.removeAttribute('aria-disabled');
+      cp.firstChild.textContent = 'Read about CrimeVic ';
+    }
+  }
+  if (CRIMEVIC_URL) {
+    var cl = document.getElementById('crimeLink');
+    cl.href = CRIMEVIC_URL; cl.target = '_blank'; cl.rel = 'noopener';
+    cl.removeAttribute('aria-disabled');
+    cl.firstChild.textContent = 'Open CrimeVic ';
+  }
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* dashboard links + QR */
+  window.addEventListener('load', function () {
+    var qr = document.getElementById('qr');
+    if (DASHBOARD_URL) {
+      document.querySelectorAll('.js-dash').forEach(function (a) {
+        a.href = DASHBOARD_URL; a.target = '_blank'; a.rel = 'noopener';
+      });
+      /* live embed: only loads when asked, so idle visitors don't use the app's hours */
+      var cover = document.getElementById('embedCover');
+      cover.hidden = false;
+      document.getElementById('dashBarUrl').textContent = DASHBOARD_URL.replace(/^https?:\/\//, '');
+      document.getElementById('embedBtn').addEventListener('click', function () {
+        var f = document.createElement('iframe');
+        f.src = DASHBOARD_URL; f.title = 'DarkVic live dashboard'; f.loading = 'lazy';
+        f.setAttribute('allow', 'fullscreen');
+        document.getElementById('dashShot').replaceWith(f);
+        cover.remove();
+        f.focus();
+      });
+      if (window.QRCode) {
+        qr.textContent = '';
+        new QRCode(qr, { text: DASHBOARD_URL, width: 172, height: 172,
+                         colorDark: '#123456', colorLight: '#FFFFFF' });
+      }
+    } else {
+      document.querySelectorAll('.js-dash-label').forEach(function (s) {
+        s.textContent = 'Dashboard goes live after deploy';
+      });
+    }
+    if (CONTACT_EMAIL) {
+      document.getElementById('contactLi').hidden = false;
+      document.getElementById('contactA').href = 'mailto:' + CONTACT_EMAIL;
+    }
+  });
+
+  /* label table cells for the stacked mobile layout */
+  document.querySelectorAll('.tbl table').forEach(function (t) {
+    var hs = Array.prototype.map.call(t.querySelectorAll('thead th'), function (th) { return th.textContent; });
+    t.querySelectorAll('tbody tr').forEach(function (tr) {
+      tr.querySelectorAll('td').forEach(function (td, i) { if (i > 0) td.setAttribute('data-l', hs[i]); });
+    });
+  });
+
+  /* mobile menu */
+  var nav = document.getElementById('nav'), mb = document.getElementById('menuBtn');
+  mb.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    mb.setAttribute('aria-expanded', open);
+    mb.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  document.querySelectorAll('#navlist a').forEach(function (a) {
+    a.addEventListener('click', function () { nav.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('open')) { nav.classList.remove('open'); mb.setAttribute('aria-expanded','false'); mb.focus(); }
+  });
+
+  /* demo video fallback */
+  var vid = document.getElementById('demoVid');
+  var srcs = vid.querySelectorAll('source');
+  srcs[srcs.length - 1].addEventListener('error', function () {
+    vid.style.display = 'none';
+    document.getElementById('vidMissing').style.display = 'grid';
+  });
+
+  /* count-ups */
+  function countUp(el) {
+    var end = parseInt(el.dataset.count, 10), fmt = el.dataset.fmt, t0 = null;
+    function f(v) { return fmt === 'comma' ? v.toLocaleString('en-AU') : fmt === 'pct' ? v + '%' : fmt === 'min' ? v + ' min' : String(v); }
+    if (reduce) { el.textContent = f(end); return; }
+    function step(ts) { if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / 1100); p = 1 - Math.pow(1 - p, 3);
+      el.textContent = f(Math.round(end * p)); if (p < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+
+  /* reveal on scroll */
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-count]').forEach(function (c) { if (!c.dataset.done) { c.dataset.done = 1; countUp(c); } });
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+
+  /* battery dial */
+  (function () {
+    var A = 4, btns = document.querySelectorAll('.seg button'), hrs = document.getElementById('hrs'),
+        out = document.getElementById('hrsOut'), batt = document.getElementById('tlBatt'),
+        mark = document.getElementById('tlMark'), vA = document.getElementById('vA'), vB = document.getElementById('vB');
+    var ICON = { ok:'#i-check', batt:'#i-clock', dark:'#i-alert' };
+    function set(el, s, label, note) {
+      el.dataset.s = s;
+      el.querySelector('.state use').setAttribute('href', ICON[s]);
+      el.querySelector('.state span').textContent = label;
+      el.querySelector('p').textContent = note;
+    }
+    function render() {
+      var h = parseFloat(hrs.value);
+      out.textContent = h.toFixed(1) + ' h';
+      hrs.setAttribute('aria-valuetext', h.toFixed(1) + ' hours since mains power lost');
+      batt.style.width = (A / 12 * 100) + '%';
+      mark.style.left = 'calc(' + (h / 12 * 100) + '% - 1.5px)';
+      if (h === 0) {
+        set(vA, 'batt', 'Outage just detected', 'R3: mains loss just reported; the tower switches to battery.');
+        set(vB, 'ok', 'Available', 'A2: several sites are still possibly serving.');
+      } else if (h <= A) {
+        set(vA, 'batt', 'Degraded, on assumed battery', 'R4 + A3: within the ' + A + ' h window, one site still possibly serving. Never high confidence (C4).');
+        set(vB, 'ok', 'Available', 'A2: two sites still have mains, so the town keeps service.');
+      } else {
+        set(vA, 'dark', 'Probable blackout', 'R5 + A4: the ' + A + ' h window has expired and no site is serving. The whole town is affected.');
+        set(vB, 'ok', 'Available', 'A2: one site is probably dark, but two still have mains.');
+      }
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        A = parseInt(b.dataset.h, 10);
+        btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+        render();
+      });
+    });
+    hrs.addEventListener('input', render);
+    render();
+  })();
+
+  /* join the network: distributor picker */
+  (function () {
+    var D = {
+      ausnet:   { name:'AusNet Services', live:true, area:"Eastern Victoria and Melbourne's outer north and east",
+                  text:'The pilot. Outages have been polled every 15 minutes since 8 Sep 2026 and assessed against 4,085 candidate sites in 770 suburbs and towns.',
+                  need:'Already connected', org:'AusNet Services' },
+      powercor: { name:'Powercor', area:"Western and central Victoria, including Geelong, Ballarat, Bendigo and Melbourne's west",
+                  text:'Not yet connected. The largest rural footprint in the state, with long feeder lines and many single-tower towns where a blackout signal matters most.',
+                  need:'One poller on its public outage feed', org:'Powercor' },
+      citipower:{ name:'CitiPower', area:"Melbourne's CBD and inner suburbs",
+                  text:'Not yet connected. Dense urban coverage, where many overlapping towers make a whole-suburb blackout rarer but its impact far larger.',
+                  need:'One poller on its public outage feed', org:'CitiPower' },
+      jemena:   { name:'Jemena', area:"Melbourne's north-west, including the airport corridor",
+                  text:'Not yet connected. It would close the gap between the CBD and the outer north on the statewide map.',
+                  need:'One poller on its public outage feed', org:'Jemena' },
+      united:   { name:'United Energy', area:"Melbourne's south-east and the Mornington Peninsula",
+                  text:'Not yet connected. Peninsula towns at the end of the network share the fragility pattern seen in the pilot.',
+                  need:'One poller on its public outage feed', org:'United Energy' }
+    };
+    var btns = document.querySelectorAll('.dist-pick button'), cur = 'ausnet';
+    var st = document.getElementById('dStatus');
+    function show(k) {
+      var d = D[k]; cur = k;
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.d === k); });
+      st.className = 'status' + (d.live ? ' is-live' : '');
+      st.querySelector('use').setAttribute('href', d.live ? '#i-check' : '#i-clock');
+      st.querySelector('span').textContent = d.live ? 'Live pilot' : 'Ready to onboard';
+      document.getElementById('dName').textContent = d.name;
+      document.getElementById('dText').textContent = d.text;
+      document.getElementById('dArea').textContent = d.area;
+      document.getElementById('dNeed').textContent = d.need;
+      document.querySelector('#dCta span:last-child').textContent = d.live ? 'Register interest' : 'Connect ' + d.name;
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.d); }); });
+    document.getElementById('dCta').addEventListener('click', function () {
+      document.getElementById('org').value = D[cur].org;
+    });
+  })();
+
+  /* join the network: expression-of-interest form (opens the visitor's email app) */
+  (function () {
+    var form = document.getElementById('eoi'), msg = document.getElementById('formMsg');
+    var to = CONTACT_EMAIL || 'alameria@student.unimelb.edu.au';
+    var checks = [
+      ['f-org', 'org', function (v) { return !!v; }],
+      ['f-name', 'name', function (v) { return v.trim().length > 1; }],
+      ['f-email', 'email', function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }]
+    ];
+    function validate(one) {
+      var firstBad = null;
+      checks.forEach(function (c) {
+        if (one && one !== c[1]) return;
+        var el = document.getElementById(c[1]), ok = c[2](el.value);
+        document.getElementById(c[0]).classList.toggle('bad', !ok);
+        el.setAttribute('aria-invalid', !ok);
+        if (!ok && !firstBad) firstBad = el;
+      });
+      return firstBad;
+    }
+    checks.forEach(function (c) {
+      var el = document.getElementById(c[1]);
+      el.addEventListener('blur', function () { if (el.value) validate(c[1]); });
+      el.addEventListener('input', function () {
+        if (document.getElementById(c[0]).classList.contains('bad')) validate(c[1]);
+      });
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var bad = validate();
+      if (bad) {
+        msg.className = 'form-msg bad';
+        msg.textContent = 'Please fix the highlighted fields before continuing.';
+        bad.focus();
+        return;
+      }
+      var f = form.elements, wants = [];
+      form.querySelectorAll('input[name=want]:checked').forEach(function (c) { wants.push('- ' + c.value); });
+      var body = [
+        'Organisation: ' + f.org.value,
+        'Name: ' + f.name.value.trim(),
+        'Email: ' + f.email.value.trim(),
+        'Role: ' + (f.role.value.trim() || '-'),
+        'Public outage feed: ' + (f.feed.value.trim() || '-'),
+        '', 'Interested in:', wants.length ? wants.join('\n') : '- (not specified)',
+        '', 'Message:', f.msg.value.trim() || '-',
+        '', 'Sent from the DarkVic website (educational prototype).'
+      ].join('\n');
+      var href = 'mailto:' + to + '?subject=' + encodeURIComponent('DarkVic: expression of interest from ' + f.org.value) +
+                 '&body=' + encodeURIComponent(body);
+      window.location.href = href;
+      msg.className = 'form-msg ok';
+      msg.innerHTML = 'Your email app should now open with the request ready to send. If it didn\'t, email <a href="' +
+                      'mailto:' + to + '">' + to + '</a> directly.';
+      msg.focus();
+    });
+  })();
+
+  /* ambient constellation in the hero (from the presentation) */
+  (function () {
+    if (reduce) return;
+    var cv = document.querySelector('canvas.fx'); if (!cv) return;
+    var ctx = cv.getContext('2d'), W = 0, H = 0, pts = [], visible = true;
+    function size() { var r = cv.parentElement.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
+    size(); window.addEventListener('resize', size);
+    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(cv);
+    var N = Math.round(Math.min(60, W / 20));
+    for (var i = 0; i < N; i++) pts.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - .5) * .00012,
+      vy: (Math.random() - .5) * .00012, r: .7 + Math.random() * 1.1, p: Math.random() * 6.28, dark: Math.random() < .1, dt: Math.random() * 1000 });
+    function frame(t) {
+      if (visible) {
+        ctx.clearRect(0, 0, W, H);
+        var a, b, i, j;
+        for (i = 0; i < N; i++) { a = pts[i]; a.x = (a.x + a.vx + 1) % 1; a.y = (a.y + a.vy + 1) % 1;
+          a.sx = a.x * W; a.sy = a.y * H;
+          a.al = a.dark ? Math.max(0, Math.sin((t + a.dt) / 2600)) * .7 : .2 + .4 * (.55 + .45 * Math.sin(t / 900 + a.p)); }
+        ctx.lineWidth = .6;
+        for (i = 0; i < N; i++) for (j = i + 1; j < N; j++) { a = pts[i]; b = pts[j];
+          var dx = a.sx - b.sx, dy = a.sy - b.sy, d2 = dx * dx + dy * dy;
+          if (d2 < 12100) { ctx.strokeStyle = 'rgba(118,165,207,' + (.14 * (1 - d2 / 12100) * Math.min(a.al, b.al)).toFixed(3) + ')';
+            ctx.beginPath(); ctx.moveTo(a.sx, a.sy); ctx.lineTo(b.sx, b.sy); ctx.stroke(); } }
+        for (i = 0; i < N; i++) { a = pts[i]; ctx.fillStyle = 'rgba(200,223,241,' + a.al.toFixed(3) + ')';
+          ctx.beginPath(); ctx.arc(a.sx, a.sy, a.r, 0, 6.28); ctx.fill(); }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>
