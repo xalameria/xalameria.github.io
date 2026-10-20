@@ -405,6 +405,61 @@
   .views span { background:var(--ice-100); color:var(--navy); border-radius:999px; padding:8px 14px;
                 font-size:.86rem; font-weight:600; }
 
+
+  /* ---------- system architecture ---------- */
+  .arch { background:#FFFFFF; }
+  .arch-fig { margin-top:32px; background:var(--ice-50); border:1px solid #E3EAF2; border-radius:var(--radius); padding:18px; }
+  .arch-fig .scroll-x svg { min-width:980px; }
+  .arch-svg { display:block; width:100%; height:auto; }
+  .arch-svg .band { fill:#EAF1F8; }
+  .arch-svg .box { fill:#FFFFFF; stroke:#C9D5E2; stroke-width:1.4; }
+  .arch-svg .box.lv { fill:#FBEFE6; stroke:#C25A1B; stroke-width:1.8; }
+  .arch-svg .box.core { stroke:var(--navy); stroke-width:2.2; }
+  .arch-svg .t-h { font:700 14px Consolas, 'SFMono-Regular', ui-monospace, monospace; fill:#142235; }
+  .arch-svg .t-s { font:400 12px Inter, Arial, sans-serif; fill:#56657A; }
+  .arch-svg .t-col { font:700 12px Montserrat, Arial, sans-serif; letter-spacing:.14em; fill:#56657A; }
+  .arch-svg .t-band { font:700 11.5px Montserrat, Arial, sans-serif; letter-spacing:.12em; fill:#56657A; }
+  .arch-svg .t-band.lv, .arch-svg .t-a.lv { fill:#C25A1B; }
+  .arch-svg .t-a { font:600 11px Inter, Arial, sans-serif; fill:#56657A; }
+  .arch-svg .a { stroke:#5B6577; stroke-width:1.4; fill:none; }
+  .arch-svg .a.lv { stroke:#C25A1B; stroke-width:2; }
+  .arch-svg .a.dash { stroke-dasharray:5 4; }
+  .arch-fig figcaption { font-size:.92rem; color:var(--dim); margin-top:12px; max-width:90ch; }
+  .arch-fig figcaption b { color:var(--navy); }
+  .arch code { font-family:Consolas, ui-monospace, monospace; font-size:.88em; color:var(--navy); }
+  .arch-sub { font-size:1.25rem; font-weight:800; margin:44px 0 14px; }
+  .arch-steps { list-style:none; display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:16px; counter-reset:as; }
+  .arch-steps li { counter-increment:as; display:grid; gap:4px; padding-top:12px; border-top:2px solid #D0DCE8; min-width:0; }
+  .arch-steps li::before { content:counter(as); font:800 13px Montserrat, Arial, sans-serif; color:#C25A1B; }
+  .arch-steps b { font-family:Montserrat, Arial, sans-serif; color:var(--navy); }
+  .arch-steps span { font-size:.92rem; color:var(--dim); }
+  .arch-table { overflow-x:auto; border:1px solid #E3EAF2; border-radius:var(--radius); background:#FFFFFF; }
+  .arch-table table { width:100%; border-collapse:collapse; font-size:.92rem; min-width:860px; }
+  .arch-table th, .arch-table td { text-align:left; vertical-align:top; padding:12px 14px; border-bottom:1px solid #E3EAF2; }
+  .arch-table th { font:700 .72rem Montserrat, Arial, sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); background:var(--ice-50); }
+  .arch-table tr:last-child td { border-bottom:0; }
+  .arch-table td:first-child { font-weight:700; color:var(--navy); white-space:nowrap; }
+  .arch .arch-tag { display:inline-block; font-size:.75rem; font-weight:600; padding:2px 9px; border-radius:999px; border:1px solid #D0DCE8; color:var(--dim); white-space:nowrap; }
+  .arch .arch-tag.auto { border-color:#C25A1B; color:#C25A1B; background:#FBEFE6; }
+  .arch-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px; }
+  .arch-card { position:relative; background:#FFFFFF; border:1px solid #E3EAF2; border-radius:var(--radius); padding:18px 20px; min-width:0; }
+  .arch-card h4 { font-size:1.05rem; font-weight:800; color:var(--navy); margin-bottom:10px; }
+  .arch-n { position:absolute; top:16px; right:18px; font:800 .8rem Montserrat, Arial, sans-serif; color:#C25A1B; }
+  .arch-card dl { display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:.9rem; }
+  .arch-card dt { font:700 .7rem Montserrat, Arial, sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-head); padding-top:3px; }
+  .arch-card dd { color:var(--txt); min-width:0; overflow-wrap:anywhere; }
+  .arch-card p { font-size:.92rem; color:var(--txt); }
+  @media (min-width:1100px) { .arch-layers { grid-template-columns:repeat(4, 1fr); } }
+  .arch-two { margin-top:40px; }
+  .arch-run .arch-card { background:var(--ice-50); }
+  .arch-two { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:28px; align-items:start; }
+  .arch-two > div { min-width:0; }
+  .arch-choices { list-style:none; display:grid; gap:12px; }
+  .arch-choices li { color:var(--dim); }
+  .arch-choices b { color:var(--txt); }
+  .arch-limit { background:var(--ice-50); border:1px solid #E3EAF2; border-left:4px solid #C25A1B; border-radius:var(--radius-sm); padding:4px 20px 18px; display:grid; gap:10px; }
+  .arch-limit .arch-sub { margin-top:18px; margin-bottom:0; }
+
   /* ---------- seven layers ---------- */
   .layers { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
   .layer { border:1px solid #E3EAF2; border-radius:14px; padding:20px 22px; background:#fff;
@@ -669,7 +724,7 @@
         <div class="bb-eyebrow"><b>Safer<span>Vic</span></b> project <a class="js-portfolio" href="../../index.html" hidden style="color:#C8DFF1;margin-left:10px;letter-spacing:.06em;text-transform:none">← All projects</a></div>
         <div class="bb-title">Dark <span>Victoria</span></div>
         <div class="bb-tag">Silence is uncertainty · not safety</div>
-        <div class="bb-src"><i class="live" aria-hidden="true"></i>ACMA RRL · AusNet · VicEmergency · ABS | Pilot: eastern Victoria, register collecting since 8 Sep 2026</div>
+        <div class="bb-src"><i class="live" aria-hidden="true"></i>ACMA RRL · AusNet · VicEmergency · ABS | Pilot: eastern Victoria, register collecting since 9 Sep 2026</div>
       </div>
     </div>
     <div class="bb-right" aria-hidden="true">
@@ -691,6 +746,7 @@
       <ul id="navlist">
         <li><a href="#problem">The problem</a></li>
         <li><a href="#how">How it works</a></li>
+        <li><a href="#architecture">Architecture</a></li>
         <li><a href="#dial">Try the dial</a></li>
         <li><a href="#join">Join</a></li>
         <li><a href="#cases">Case studies</a></li>
@@ -790,14 +846,14 @@
   <div class="wrap">
     <div class="head">
       <span class="pill rv"><svg><use href="#i-alert"/></svg>The problem</span>
-      <h2 id="problem-h" class="rv d1">A dead tower <span class="mute">cannot report itself</span></h2>
-      <p class="lede rv d2">Power outages are published within minutes. Mobile blackouts aren't published at all. Carriers' battery figures are commercial-in-confidence, and the failure erases its own reporting path.</p>
+      <h2 id="problem-h" class="rv d1">A silent tower <span class="mute">leaves no public trace</span></h2>
+      <p class="lede rv d2">Power outages are published within minutes. Mobile blackouts aren't published at all. Carriers' battery figures are commercial-in-confidence, and the people affected can't call out to report the outage.</p>
     </div>
     <div class="stats">
       <div class="stat rv"><div class="sico"><svg><use href="#i-tower"/></svg></div>
         <div><b data-count="4085" data-fmt="comma">4,085</b><span>candidate tower sites</span><small>ACMA licence register, AusNet pilot area</small></div></div>
       <div class="stat rv d1"><div class="sico"><svg><use href="#i-pin"/></svg></div>
-        <div><b data-count="770">770</b><span>suburbs and towns</span><small>each with its own dependency area</small></div></div>
+        <div><b data-count="770">770</b><span>suburbs and towns</span><small>ABS suburb and locality boundaries with at least one tower site</small></div></div>
       <div class="stat alert rv d2"><div class="sico"><svg><use href="#i-alert"/></svg></div>
         <div><b data-count="34" data-fmt="pct">34%</b><span>depend on one tower</span><small>one failure silences the whole town</small></div></div>
     </div>
@@ -818,7 +874,7 @@
         <text x="800" y="82" fill="#344054" font-size="13" text-anchor="middle" font-family="Inter,Arial">like &#8220;no news&#8221;</text>
       </svg>
       </div>
-      <p class="dlabel">The failure erases its own reporting path. DarkVic works from what is still observable.</p>
+      <p class="dlabel">The outage is never published, and the people affected can't call out to report it. DarkVic works from what is still observable.</p>
     </div>
   </div>
 </section>
@@ -829,7 +885,7 @@
     <div class="head center">
       <span class="pill rv"><svg><use href="#i-brain"/></svg>How it works</span>
       <h2 id="how-h" class="rv d1">Reason from the evidence <span class="mute">that survives</span></h2>
-      <p class="lede rv d2">A pipeline that runs every 15 minutes. Everything on the map is pre-computed by it, so the dashboard never re-implements the logic.</p>
+      <p class="lede rv d2">A poller collects the evidence every 15 minutes, and a rules engine turns it into probable service states. The dashboard only displays those results and never re-implements the logic.</p>
     </div>
     <div class="steps">
       <article class="step rv"><span class="n">01</span><div class="sico"><svg><use href="#i-radar"/></svg></div><h3>Sense</h3><p>A Python poller collects AusNet outages and VicEmergency hazards every 15 minutes.</p></article>
@@ -877,6 +933,235 @@
       <div class="rule rv d2"><b>C1–C4</b><div class="t">Confidence rules</div><p>How fresh and consistent the evidence is, shown next to every verdict.</p></div>
     </div>
     <div class="principle rv"><svg><use href="#i-shield"/></svg>The system reports probable blackout, never certainty. No evidence is not the same as safe.</div>
+  </div>
+</section>
+
+<!-- ============ SYSTEM ARCHITECTURE ============ -->
+<section class="arch" id="architecture" aria-labelledby="arch-h">
+  <div class="wrap">
+    <div class="head center">
+      <span class="pill rv"><svg><use href="#i-db"/></svg>System architecture</span>
+      <h2 id="arch-h" class="rv d1">Behind the dashboard, <span class="mute">a working pipeline</span></h2>
+      <p class="lede rv d2">A scheduled Python poller keeps every public feed it reads, a rules engine turns that evidence into probable service states, and the results are exported to the Shiny dashboard and this website.</p>
+    </div>
+
+    <figure class="arch-fig rv">
+      <div class="scroll-x">
+      <svg class="arch-svg" viewBox="0 0 1200 570" role="img" aria-label="DarkVic architecture. Every 15 minutes a Windows scheduled task runs poll_feeds.py, which fetches the AusNet outage tracker and the VicEmergency feed, keeps raw snapshots and appends an outage register. A one-off reference build turns the ACMA licence register and ABS boundaries into 4,085 sites and service areas. build_store.py combines both into a GeoPackage. live_events.py and replay_feb2024.py call the rules in state_model.py, and export_dashboard.py feeds the Shiny dashboard, deployed to shinyapps.io and linked from this website on GitHub Pages.">
+        <defs>
+          <marker id="aah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5B6577"/></marker>
+          <marker id="aahl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#C25A1B"/></marker>
+        </defs>
+        <text class="t-col" x="110" y="26" text-anchor="middle">SOURCES</text>
+        <text class="t-col" x="345" y="26" text-anchor="middle">INGEST</text>
+        <text class="t-col" x="590" y="26" text-anchor="middle">STORE</text>
+        <text class="t-col" x="840" y="26" text-anchor="middle">PROCESS</text>
+        <text class="t-col" x="1088" y="26" text-anchor="middle">SERVE</text>
+
+        <rect class="band" x="8" y="42" width="964" height="228" rx="10"/>
+        <text class="t-band lv" x="20" y="62">LIVE LOOP · EVERY 15 MINUTES, AUTOMATIC</text>
+        <rect class="band" x="8" y="286" width="964" height="214" rx="10"/>
+        <text class="t-band" x="20" y="306">REFERENCE BUILD · RUN ONCE, BY HAND</text>
+
+        <rect class="box" x="20" y="84" width="180" height="56" rx="8"/><text class="t-h" x="32" y="107">AusNet tracker</text><text class="t-s" x="32" y="126">outage table, HTML</text>
+        <rect class="box" x="20" y="174" width="180" height="56" rx="8"/><text class="t-h" x="32" y="197">VicEmergency</text><text class="t-s" x="32" y="216">incident feed, GeoJSON</text>
+        <rect class="box" x="20" y="322" width="180" height="56" rx="8"/><text class="t-h" x="32" y="345">ACMA licences</text><text class="t-s" x="32" y="364">RRL extract, 26 Aug 2026</text>
+        <rect class="box" x="20" y="414" width="180" height="56" rx="8"/><text class="t-h" x="32" y="437">ABS SAL 2021</text><text class="t-s" x="32" y="456">suburb and town boundaries</text>
+
+        <rect class="box lv" x="252" y="84" width="186" height="146" rx="8"/>
+        <text class="t-h" x="264" y="108">poll_feeds.py</text>
+        <text class="t-s" x="264" y="130">Windows Task Scheduler</text>
+        <text class="t-s" x="264" y="148">"DarkArea Poller", PT15M</text>
+        <text class="t-s" x="264" y="166">requests · pandas</text>
+        <text class="t-s" x="264" y="184">30 s timeout, named</text>
+        <text class="t-s" x="264" y="202">user agent</text>
+        <rect class="box" x="252" y="322" width="186" height="56" rx="8"/><text class="t-h" x="264" y="345">extract_sites.py</text><text class="t-s" x="264" y="364">+ carriers, technical</text>
+        <rect class="box" x="252" y="414" width="186" height="56" rx="8"/><text class="t-h" x="264" y="437">localities.py</text><text class="t-s" x="264" y="456">+ cross_boundary (Voronoi)</text>
+
+        <rect class="box lv" x="490" y="84" width="200" height="56" rx="8"/><text class="t-h" x="502" y="107">data/snapshots/</text><text class="t-s" x="502" y="126">every raw HTML and JSON</text>
+        <rect class="box lv" x="490" y="174" width="200" height="56" rx="8"/><text class="t-h" x="502" y="197">outage_events.csv</text><text class="t-s" x="502" y="216">append-only register</text>
+        <rect class="box" x="490" y="322" width="200" height="148" rx="8"/>
+        <text class="t-h" x="502" y="345">darkvic_store.gpkg</text>
+        <text class="t-s" x="502" y="364">GeoPackage (SQLite)</text>
+        <text class="t-s" x="502" y="388">snapshots · outage_events</text>
+        <text class="t-s" x="502" y="406">hazard_versions · sites</text>
+        <text class="t-s" x="502" y="424">dependency_areas</text>
+        <text class="t-s" x="502" y="448">"as of" any past moment</text>
+
+        <rect class="box" x="742" y="84" width="196" height="56" rx="8"/><text class="t-h" x="754" y="107">live_events.py</text><text class="t-s" x="754" y="126">events seen in last 45 min</text>
+        <rect class="box core" x="742" y="176" width="196" height="138" rx="8"/>
+        <text class="t-h" x="754" y="200">state_model.py</text>
+        <text class="t-s" x="754" y="222">pure functions, no I/O</text>
+        <text class="t-s" x="754" y="244">R1–R5 each tower site</text>
+        <text class="t-s" x="754" y="262">A1–A5 each town</text>
+        <text class="t-s" x="754" y="280">C1–C4 confidence</text>
+        <text class="t-s" x="754" y="300">backup 2 · 4 · 8 h</text>
+        <rect class="box" x="742" y="346" width="196" height="56" rx="8"/><text class="t-h" x="754" y="369">replay_feb2024.py</text><text class="t-s" x="754" y="388">13 Feb 2024 scenario</text>
+        <rect class="box" x="742" y="430" width="196" height="40" rx="8"/><text class="t-h" x="754" y="455">pytest · 18 tests</text>
+
+        <rect class="box" x="990" y="84" width="196" height="56" rx="8"/><text class="t-h" x="1002" y="107">export_dashboard.py</text><text class="t-s" x="1002" y="126">→ prep_data.R → .rds</text>
+        <rect class="box core" x="990" y="176" width="196" height="88" rx="8"/>
+        <text class="t-h" x="1002" y="200">Shiny dashboard</text>
+        <text class="t-s" x="1002" y="222">app.R · network.R</text>
+        <text class="t-s" x="1002" y="240">timeline.R · view3d.R</text>
+        <rect class="box" x="990" y="300" width="196" height="56" rx="8"/><text class="t-h" x="1002" y="323">shinyapps.io</text><text class="t-s" x="1002" y="342">rsconnect::deployApp</text>
+        <rect class="box" x="990" y="392" width="196" height="56" rx="8"/><text class="t-h" x="1002" y="415">GitHub Pages</text><text class="t-s" x="1002" y="434">this website, static</text>
+
+        <line class="a lv" x1="200" y1="112" x2="250" y2="112" marker-end="url(#aahl)"/><text class="t-a lv" x="225" y="104" text-anchor="middle">GET</text>
+        <line class="a lv" x1="200" y1="202" x2="250" y2="202" marker-end="url(#aahl)"/><text class="t-a lv" x="225" y="194" text-anchor="middle">GET</text>
+        <line class="a lv" x1="438" y1="112" x2="488" y2="112" marker-end="url(#aahl)"/><text class="t-a lv" x="463" y="104" text-anchor="middle">keeps</text>
+        <line class="a lv" x1="438" y1="202" x2="488" y2="202" marker-end="url(#aahl)"/><text class="t-a lv" x="463" y="194" text-anchor="middle">appends</text>
+
+        <line class="a" x1="590" y1="230" x2="590" y2="320" marker-end="url(#aah)"/><text class="t-a" x="598" y="262">build_store.py</text><text class="t-a" x="598" y="277">rebuilds</text>
+        <line class="a" x1="200" y1="350" x2="250" y2="350" marker-end="url(#aah)"/><text class="t-a" x="225" y="342" text-anchor="middle">filter</text>
+        <line class="a" x1="200" y1="442" x2="250" y2="442" marker-end="url(#aah)"/><text class="t-a" x="225" y="434" text-anchor="middle">join</text>
+        <line class="a" x1="438" y1="350" x2="488" y2="350" marker-end="url(#aah)"/><text class="t-a" x="463" y="342" text-anchor="middle">4,085 sites</text>
+        <line class="a" x1="438" y1="442" x2="488" y2="442" marker-end="url(#aah)"/><text class="t-a" x="463" y="434" text-anchor="middle">service areas</text>
+
+        <line class="a lv" x1="690" y1="112" x2="740" y2="112" marker-end="url(#aahl)"/><text class="t-a lv" x="715" y="104" text-anchor="middle">hazards</text>
+        <path class="a lv" d="M690 202 H714 V128 H740" marker-end="url(#aahl)"/><text class="t-a lv" x="704" y="160" text-anchor="end">outages</text>
+        <path class="a" d="M690 336 H726 V136 H740" marker-end="url(#aah)"/><text class="t-a" x="722" y="330" text-anchor="end">sites, areas</text>
+        <line class="a" x1="840" y1="140" x2="840" y2="174" marker-end="url(#aah)"/><text class="t-a" x="848" y="162">calls</text>
+        <line class="a" x1="840" y1="346" x2="840" y2="316" marker-end="url(#aah)"/><text class="t-a" x="848" y="335">calls</text>
+        <line class="a dash" x1="840" y1="430" x2="840" y2="404" marker-end="url(#aah)"/><text class="t-a" x="848" y="421">checks</text>
+
+        <line class="a" x1="938" y1="112" x2="988" y2="112" marker-end="url(#aah)"/><text class="t-a" x="963" y="104" text-anchor="middle">states</text>
+        <path class="a" d="M938 374 H962 V128 H988" marker-end="url(#aah)"/><text class="t-a" x="944" y="392">replay</text>
+        <line class="a" x1="1088" y1="140" x2="1088" y2="174" marker-end="url(#aah)"/><text class="t-a" x="1096" y="162">.rds files</text>
+        <line class="a" x1="1088" y1="264" x2="1088" y2="298" marker-end="url(#aah)"/><text class="t-a" x="1096" y="286">deploy</text>
+        <line class="a dash" x1="1088" y1="392" x2="1088" y2="358" marker-end="url(#aah)"/><text class="t-a" x="1096" y="380">links to</text>
+
+        <text class="t-s" x="20" y="530">Coordinates are stored in GDA2020 (EPSG:7844); distances and areas are measured in VicGrid (EPSG:7899).</text>
+        <text class="t-s" x="20" y="550">The deployed dashboard carries a snapshot of these outputs; it does not connect to the poller live.</text>
+      </svg>
+      </div>
+      <figcaption><b>The orange path runs on its own every 15 minutes.</b> A Windows scheduled task fetches both public feeds, keeps every raw response and appends new outage events to the register. The grey parts are run by hand: the site inventory and service areas, the GeoPackage store, the exports and the deploy. The rules in <code>state_model.py</code> sit at the centre and are shared by the live assessment and the February 2024 replay.</figcaption>
+    </figure>
+
+    <h3 class="arch-sub rv">How one outage travels through the system</h3>
+    <ol class="arch-steps">
+      <li class="rv"><b>Poll</b><span>At the next 15-minute mark, <code>poll_feeds.py</code> fetches the AusNet table and the VicEmergency feed.</span></li>
+      <li class="rv d1"><b>Keep</b><span>Both raw responses are saved with a UTC timestamp, so any moment can be replayed later.</span></li>
+      <li class="rv d2"><b>Register</b><span>New incidents are appended to <code>outage_events.csv</code>, deduplicated on incident number and outage time.</span></li>
+      <li class="rv"><b>Infer</b><span><code>live_events.py</code> matches towns to tower sites and runs the R, A and C rules under 2, 4 and 8 hours.</span></li>
+      <li class="rv d1"><b>Export</b><span><code>export_dashboard.py</code> writes a 30-minute grid for the last 14 days, and <code>prep_data.R</code> turns it into .rds files.</span></li>
+      <li class="rv d2"><b>Serve</b><span>The Shiny app reads those files and is deployed to shinyapps.io, linked from this site.</span></li>
+    </ol>
+
+    <h3 class="arch-sub rv">Inside the rules engine</h3>
+    <figure class="arch-fig rv">
+      <div class="scroll-x">
+      <svg class="arch-svg" viewBox="0 0 1100 330" role="img" aria-label="Rules engine. Each tower site is UNKNOWN without fresh evidence (R1), MAINS_OK when no outage is recorded (R2), MAINS_LOST for the first 10 minutes of an outage (R3), ON_BACKUP until the assumed battery of 2, 4 or 8 hours runs out (R4), then WINDOW_EXPIRED (R5). Each town is service likely available with two or more serving sites (A2), degraded with exactly one (A3), probable blackout with none serving and at least one expired (A4), and indeterminate otherwise (A1, A5).">
+        <defs><marker id="rah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5B6577"/></marker></defs>
+        <text class="t-band" x="20" y="24">EACH TOWER SITE · RULES R1–R5 · state_model.classify_site()</text>
+        <rect class="box" x="20" y="40" width="230" height="46" rx="8"/><text class="t-h" x="32" y="60">MAINS_OK · R2</text><text class="t-s" x="32" y="77">no outage, evidence under 1 h old</text>
+        <rect class="box" x="20" y="96" width="230" height="46" rx="8"/><text class="t-h" x="32" y="116">UNKNOWN · R1</text><text class="t-s" x="32" y="133">no evidence, or older than 1 h</text>
+
+        <text class="t-s" x="290" y="52">After mains power is lost, the clock runs →</text>
+        <rect x="290" y="66" width="44" height="40" fill="#F6E7C8"/>
+        <rect x="334" y="66" width="400" height="40" fill="#E4EEF8"/>
+        <rect x="734" y="66" width="346" height="40" fill="#F8DCD3"/>
+        <text class="t-h" x="534" y="91" text-anchor="middle">ON_BACKUP · R4</text>
+        <text class="t-h" x="907" y="91" text-anchor="middle">WINDOW_EXPIRED · R5</text>
+        <text class="t-a" x="312" y="91" text-anchor="middle">R3</text>
+        <line class="a" x1="290" y1="106" x2="290" y2="120"/><text class="t-s" x="290" y="134" text-anchor="middle">0</text>
+        <line class="a" x1="334" y1="106" x2="334" y2="120"/><text class="t-s" x="334" y="134" text-anchor="start">10 min · MAINS_LOST ends</text>
+        <line class="a dash" x1="734" y1="58" x2="734" y2="120"/><text class="t-s" x="734" y="134" text-anchor="middle">assumed battery ends · 2, 4 or 8 h</text>
+        <text class="t-s" x="1080" y="134" text-anchor="end">probable outage at this site</text>
+
+        <text class="t-band" x="20" y="178">EACH TOWN · RULES A1–A5 · state_model.aggregate_locality() · serving = MAINS_OK, MAINS_LOST or ON_BACKUP</text>
+        <rect x="20" y="192" width="255" height="74" rx="8" fill="#E6F2EA" stroke="#3B8E5A" stroke-width="1.6"/>
+        <text class="t-h" x="34" y="214">Service likely available</text><text class="t-s" x="34" y="234">2 or more sites still serving</text><text class="t-a" x="34" y="254">A2</text>
+        <rect x="290" y="192" width="255" height="74" rx="8" fill="#FBEFDF" stroke="#E08214" stroke-width="1.6"/>
+        <text class="t-h" x="304" y="214">Degraded, single site</text><text class="t-s" x="304" y="234">exactly 1 site still serving</text><text class="t-a" x="304" y="254">A3</text>
+        <rect x="560" y="192" width="255" height="74" rx="8" fill="#FBEAE5" stroke="#CC3311" stroke-width="1.8"/>
+        <text class="t-h" x="574" y="214">Probable blackout</text><text class="t-s" x="574" y="234">none serving, 1 or more expired</text><text class="t-a" x="574" y="254">A4</text>
+        <rect x="830" y="192" width="250" height="74" rx="8" fill="#F1F3F6" stroke="#98A2B3" stroke-width="1.4"/>
+        <text class="t-h" x="844" y="214">Indeterminate</text><text class="t-s" x="844" y="234">all unknown, or no evidence either way</text><text class="t-a" x="844" y="254">A1 · A5</text>
+
+        <text class="t-band" x="20" y="296">CONFIDENCE · RULES C1–C4</text>
+        <text class="t-s" x="20" y="316">Starts high (C1) · one level lower if any site is unknown (C2) · one level lower if no hazard explains a blackout (C3) · degraded and on-backup results are never high (C4)</text>
+      </svg>
+      </div>
+      <figcaption><b>The battery assumption only moves the dashed line.</b> A site's state depends on how long its suburb or town has been without mains power, compared with the assumed backup of 2, 4 or 8 hours. Towns are then rolled up from the sites that serve them, through the Voronoi service areas, and every result carries the rule that produced it.</figcaption>
+    </figure>
+
+    <h3 class="arch-sub rv">Each layer in detail</h3>
+    <div class="arch-cards arch-layers">
+      <article class="arch-card rv"><span class="arch-n">1</span><h4>Sensing</h4><dl>
+        <dt>Code</dt><dd><code>poll_feeds.py</code> · <code>poll_ausnet()</code>, <code>poll_vicemergency()</code></dd>
+        <dt>Reads</dt><dd>AusNet Outage Tracker page (first HTML table, read with pandas) and the VicEmergency <code>osom-geojson.json</code> feed</dd>
+        <dt>Settings</dt><dd>every 15 minutes, matching AusNet's 600-second cache · 30 s timeout · a user agent that names the project</dd>
+        <dt>Runs</dt><dd>Windows Task Scheduler task "DarkArea Poller", repeating every 15 minutes, with no window (pythonw), logging to <code>poller.log</code></dd></dl></article>
+      <article class="arch-card rv d1"><span class="arch-n">2</span><h4>Transport</h4><dl>
+        <dt>How</dt><dd>scheduled HTTPS GET requests with <code>requests</code>, one per feed per poll</dd>
+        <dt>Writes</dt><dd>each response saved unchanged and named by UTC time, <code>ausnet_YYYYMMDDTHHMMSSZ.html</code> and <code>vicemergency_….json</code></dd>
+        <dt>Resilience</dt><dd>if the register is open in another program, that poll skips the update and the next poll catches up</dd></dl></article>
+      <article class="arch-card rv d2"><span class="arch-n">3</span><h4>Storage</h4><dl>
+        <dt>Raw</dt><dd><code>data/snapshots/</code> · 2,340 files, about 294 MB, collected since 9 September 2026</dd>
+        <dt>Register</dt><dd><code>outage_events.csv</code> · append-only, 12 columns, one row per incident, keyed on incident number and outage time, with first and last seen times</dd>
+        <dt>Store</dt><dd><code>darkvic_store.gpkg</code> · a GeoPackage with five layers, hazards versioned by a hash of their content, and an <code>as_of()</code> query with a 15-minute grace period</dd></dl></article>
+      <article class="arch-card rv"><span class="arch-n">4</span><h4>Processing</h4><dl>
+        <dt>Sites</dt><dd><code>extract_sites.py</code> · carrier clients → 17,423 licences → 611,821 transmitter records at 700 to 3,800 MHz → 23,916 sites → 6,012 in Victoria → 4,085 in the pilot area</dd>
+        <dt>Places</dt><dd><code>localities.py</code> joins sites to ABS suburbs and towns and draws Voronoi cells in VicGrid; <code>cross_boundary.py</code> keeps a link when a cell covers at least 10% of a place</dd>
+        <dt>Rules</dt><dd><code>state_model.py</code> · R1–R5, A1–A5, C1–C4, called by <code>live_events.py</code> (events seen in the last 45 minutes) and <code>replay_feb2024.py</code></dd></dl></article>
+      <article class="arch-card rv d1"><span class="arch-n">5</span><h4>Interface</h4><dl>
+        <dt>Export</dt><dd><code>export_dashboard.py</code> writes seven CSVs, including a 30-minute grid of every town's state over 14 days under all three assumptions (285,102 rows)</dd>
+        <dt>Prepare</dt><dd><code>prep_data.R</code> and <code>prep_service_areas.R</code> turn them into .rds files the app loads at start-up</dd>
+        <dt>App</dt><dd>Shiny with bslib · <code>app.R</code>, <code>network.R</code>, <code>timeline.R</code>, <code>view3d.R</code> · Leaflet maps and a MapLibre 3D view</dd></dl></article>
+      <article class="arch-card rv d2"><span class="arch-n">6</span><h4>Governance</h4><dl>
+        <dt>Assumptions</dt><dd>every parameter lives in <code>config.py</code>, and the battery assumption is always on screen</dd>
+        <dt>Data</dt><dd>public sources only · ABS data under CC BY 4.0 · ACMA data under the ACMA licence to use the Register · AusNet and VicEmergency used with attribution · no personal information stored</dd>
+        <dt>Honesty</dt><dd>every result is labelled an inference, carries its rule, and an uncoloured town means no evidence, not safe</dd></dl></article>
+      <article class="arch-card rv"><span class="arch-n">7</span><h4>Sustainability</h4><dl>
+        <dt>Load</dt><dd>two requests every 15 minutes, and about 10 MB of raw evidence a day</dd>
+        <dt>Scale</dt><dd>statewide needs one more poller per distributor (Powercor, CitiPower, Jemena, United Energy) with the same rules</dd>
+        <dt>Checks</dt><dd>18 pytest tests across the rules (9), the store (5) and the dependency overlay (4)</dd></dl></article>
+    </div>
+
+    <h3 class="arch-sub rv">Data dictionary</h3>
+    <div class="arch-table rv">
+      <table>
+        <thead><tr><th>File</th><th>Rows</th><th>Key columns</th><th>Written by</th><th>Read by</th></tr></thead>
+        <tbody>
+          <tr><td><code>outage_events.csv</code></td><td>173</td><td>Incident number, Outage time, Towns impacted, Est. power on, captured_at_utc, last_seen_utc</td><td><code>poll_feeds.py</code></td><td>live assessment, store, export</td></tr>
+          <tr><td><code>candidate_sites_pilot.csv</code></td><td>4,085</td><td>site_id, latitude, longitude, name, postcode</td><td><code>extract_sites.py</code></td><td><code>localities.py</code></td></tr>
+          <tr><td><code>site_carriers.csv</code></td><td>4,085</td><td>carriers, licensees, n_carriers</td><td><code>site_carriers.py</code></td><td>dashboard network and 3D view</td></tr>
+          <tr><td><code>site_technical.csv</code></td><td>4,085</td><td>max_height_m, bands, tech, horizon_km, ground_elev_m</td><td><code>site_technical.py</code></td><td>dashboard 3D view</td></tr>
+          <tr><td><code>sites_localities.csv</code></td><td>4,085</td><td>site_id, locality, sal_code</td><td><code>localities.py</code></td><td>live assessment, export</td></tr>
+          <tr><td><code>locality_dependencies.csv</code></td><td>3,481</td><td>locality, site_id, share, home_locality, cross_boundary</td><td><code>cross_boundary.py</code></td><td>live assessment, dashboard</td></tr>
+          <tr><td><code>darkvic_store.gpkg</code></td><td>5 layers</td><td>snapshots, outage_events, hazard_versions, sites, dependency_areas</td><td><code>build_store.py</code></td><td>as-of queries, tests</td></tr>
+          <tr><td><code>live_assessment.csv</code></td><td>per run</td><td>locality, backup_hours, state, confidence, rule, hazard_intersects</td><td><code>live_events.py</code></td><td><code>render_map.py</code></td></tr>
+          <tr><td><code>register_states.csv</code></td><td>285,102</td><td>time, locality, bh, state</td><td><code>export_dashboard.py</code></td><td>Live register and Analyse tabs</td></tr>
+          <tr><td><code>hazards.csv</code></td><td>706</td><td>category, location, status, sites_within_15km</td><td><code>export_dashboard.py</code></td><td>Explore map and 3D view</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="arch-sub rv">Runtime and deployment</h3>
+    <div class="arch-cards arch-run">
+      <div class="arch-card rv"><h4>Python pipeline</h4><p>Python 3.14 in a project virtual environment · pandas, requests, lxml, geopandas, shapely, pyogrio, folium, matplotlib · run on Windows 11, with the poller under Task Scheduler.</p></div>
+      <div class="arch-card rv d1"><h4>R dashboard</h4><p>R 4.6 · shiny, bslib, leaflet, mapgl, sf, dplyr, ggplot2, ggiraph · deployed with <code>rsconnect::deployApp()</code> as a 35-file, 9.6 MB bundle with 89 R package dependencies.</p></div>
+      <div class="arch-card rv d2"><h4>Hosting</h4><p>Dashboard on shinyapps.io · website and presentation as static files on GitHub Pages · coordinates in GDA2020 (EPSG:7844), distances and areas in VicGrid (EPSG:7899).</p></div>
+    </div>
+
+    <div class="arch-two">
+      <div class="rv">
+        <h3 class="arch-sub">Design choices</h3>
+        <ul class="arch-choices">
+          <li><b>Keep the raw evidence.</b> Every response is stored unchanged, so a result can be traced back to the exact page the poller saw.</li>
+          <li><b>Rules, not a trained model.</b> Fourteen explicit rules in pure functions, each unit-tested, and every result carries the rule that produced it.</li>
+          <li><b>One spatial file for the store.</b> A GeoPackage keeps tables and geometry together in a single SQLite file that QGIS, R and Python all open.</li>
+          <li><b>Polite polling.</b> Fifteen minutes matches AusNet's ten-minute cache, and every request names the project in its user agent.</li>
+          <li><b>Assumptions in one place.</b> Backup hours, staleness, detection lag and the pilot area all live in <code>config.py</code>.</li>
+        </ul>
+      </div>
+      <div class="arch-limit rv d1">
+        <h3 class="arch-sub">What is not automated yet</h3>
+        <p>Only the poller runs on its own. The assessment, export and deploy are run by hand, so the public dashboard shows the evidence as of its last deploy, not the latest poll.</p>
+        <p>The next step is a second scheduled task that runs the assessment, export and deploy after each poll, or an app that reads the GeoPackage directly. Statewide coverage then needs one more poller per distributor, with the same rules.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -994,7 +1279,7 @@
         <div class="body">
           <div class="meta"><span class="tag steel">Planning</span><span>Structural analysis</span></div>
           <h3>One tower, one town</h3>
-          <p>Around a third of the 770 localities depend on a single tower's dependency area. They are the first to fall silent in any outage, and the planning view ranks them before the next event arrives.</p>
+          <p>Around a third of the 770 suburbs and towns depend on a single tower site. They are the first to fall silent in any outage, and the planning view ranks them before the next event arrives.</p>
           <div class="kpis"><div><b>34%</b><small>single-tower towns</small></div><div><b>770</b><small>localities ranked</small></div></div>
           <a class="more js-dash" href="#live">Explore fragility <svg><use href="#i-arrow"/></svg></a>
         </div>
@@ -1037,7 +1322,7 @@
       <div class="kpi rv"><small>Candidate mobile sites</small><b>4,085</b><span>ACMA RRL, pilot area</span></div>
       <div class="kpi rv d1"><small>Pilot suburbs and towns</small><b>770</b><span>ABS SAL 2021</span></div>
       <div class="kpi warn rv d2"><small>Single-site towns</small><b>260 (34%)</b><span>one damaged site = probable blackout</span></div>
-      <div class="kpi alert rv d3"><small>Outage events</small><b>119</b><span>224 towns, since 8 Sep 2026</span></div>
+      <div class="kpi alert rv d3"><small>Outage events</small><b>119</b><span>224 towns, since 9 Sep 2026</span></div>
     </div>
     <p class="dlabel center rv" style="margin:-12px 0 24px">As at the 3 Oct 2026, 23:30 assessment, with 706 VicEmergency hazards mapped over the previous ~3 days. Counts refresh with each export; the 34% ratio is stable.</p>
     <figure class="browser rv" id="dashFrame">
@@ -1139,7 +1424,7 @@
       <div class="dist-card rv" id="distCard" aria-live="polite">
         <span class="status is-live" id="dStatus"><svg><use href="#i-check"/></svg><span>Live pilot</span></span>
         <h3 id="dName">AusNet Services</h3>
-        <p id="dText">The pilot. Outages have been polled every 15 minutes since 8 Sep 2026 and assessed against 4,085 candidate sites in 770 suburbs and towns.</p>
+        <p id="dText">The pilot. Outages have been polled every 15 minutes since 9 Sep 2026 and assessed against 4,085 candidate sites in 770 suburbs and towns.</p>
         <dl>
           <dt>Service area</dt><dd id="dArea">Eastern Victoria and Melbourne's outer east</dd>
           <dt>What it takes</dt><dd id="dNeed">Already connected</dd>
@@ -1241,8 +1526,8 @@
         <table>
           <thead><tr><th scope="col">Source</th><th scope="col">Used for</th><th scope="col">Refresh / version</th></tr></thead>
           <tbody>
-            <tr><td>ACMA Register of Radiocommunications Licences</td><td>4,085 candidate mobile-band sites in the pilot area</td><td>Extract 26 Aug 2026 · CC BY 4.0</td></tr>
-            <tr><td>AusNet Services outage information</td><td>Mains-power loss evidence</td><td>Polled every 15 min since 8 Sep 2026 · publicly available, attributed, remains the publisher's</td></tr>
+            <tr><td>ACMA Register of Radiocommunications Licences</td><td>4,085 candidate mobile-band sites in the pilot area</td><td>Extract 26 Aug 2026 · ACMA licence to use the Register</td></tr>
+            <tr><td>AusNet Services outage information</td><td>Mains-power loss evidence</td><td>Polled every 15 min since 9 Sep 2026 · publicly available, attributed, remains the publisher's</td></tr>
             <tr><td>VicEmergency feed</td><td>Hazards and exposure</td><td>Polled every 15 min, snapshots archived · same terms</td></tr>
             <tr><td>ABS Suburbs and Localities 2021</td><td>770 dependency boundaries (suburbs and towns)</td><td>CC BY 4.0</td></tr>
             <tr><td>Geoscience Australia</td><td>Earthquake details, 3 Oct 2026</td><td>Event record</td></tr>
@@ -1384,6 +1669,7 @@
         <li><a href="#dashboard">Dashboard</a></li>
         <!-- DECK PAUSED: <li><a href="present/index.html">Presentation</a></li> -->
         <li><a href="#method">Method and data</a></li>
+        <li><a href="#architecture">System architecture</a></li>
         <li><a href="#layers">Seven layers</a></li>
         <li><a href="#join">Join the network</a></li>
         <li><a href="#safervic">The SaferVic Project</a></li>
@@ -1396,6 +1682,7 @@
       <div class="sched">
         <div><span>Feed polling</span><b>every 15 min</b></div>
         <div><span>Event register</span><b>continuous</b></div>
+        <div><span>Dashboard data</span><b>refreshed at each deploy</b></div>
         <div><span>Pilot area</span><b>AusNet, eastern Vic</b></div>
         <div><span>Battery assumption</span><b>2 / 4 / 8 h</b></div>
       </div>
@@ -1562,7 +1849,7 @@
   (function () {
     var D = {
       ausnet:   { name:'AusNet Services', live:true, area:"Eastern Victoria and Melbourne's outer north and east",
-                  text:'The pilot. Outages have been polled every 15 minutes since 8 Sep 2026 and assessed against 4,085 candidate sites in 770 suburbs and towns.',
+                  text:'The pilot. Outages have been polled every 15 minutes since 9 Sep 2026 and assessed against 4,085 candidate sites in 770 suburbs and towns.',
                   need:'Already connected', org:'AusNet Services' },
       powercor: { name:'Powercor', area:"Western and central Victoria, including Geelong, Ballarat, Bendigo and Melbourne's west",
                   text:'Not yet connected. The largest rural footprint in the state, with long feeder lines and many single-tower towns where a blackout signal matters most.',
