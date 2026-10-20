@@ -855,7 +855,7 @@
       <div class="stat rv d1"><div class="sico"><svg><use href="#i-pin"/></svg></div>
         <div><b data-count="770">770</b><span>suburbs and towns</span><small>ABS suburb and locality boundaries with at least one tower site</small></div></div>
       <div class="stat alert rv d2"><div class="sico"><svg><use href="#i-alert"/></svg></div>
-        <div><b data-count="34" data-fmt="pct">34%</b><span>depend on one tower</span><small>one failure silences the whole town</small></div></div>
+        <div><b data-count="34" data-fmt="pct">34%</b><span>of towns with a candidate site depend on a single site in the model</span><small>its loss could indicate a potential town-wide service disruption</small></div></div>
     </div>
     <div class="diagram rv">
       <div class="scroll-x">
@@ -1083,7 +1083,7 @@
         <text class="t-s" x="20" y="316">Starts high (C1) · one level lower if any site is unknown (C2) · one level lower if no hazard explains a blackout (C3) · degraded and on-backup results are never high (C4)</text>
       </svg>
       </div>
-      <figcaption><b>The battery assumption only moves the dashed line.</b> A site's state depends on how long its suburb or town has been without mains power, compared with the assumed backup of 2, 4 or 8 hours. Towns are then rolled up from the sites that serve them, through the Voronoi service areas, and every result carries the rule that produced it.</figcaption>
+      <figcaption><b>The battery assumption only moves the dashed line.</b> A site's state depends on how long its suburb or town has been without mains power, compared with the assumed backup of 2, 4 or 8 hours. The live assessment uses Voronoi-based service-dependency proxies to associate towns with candidate sites; these are not measured coverage areas. The dashboard register instead classifies each named town using its own candidate sites. Each result is traceable to the rule that produced it.</figcaption>
     </figure>
 
     <h3 class="arch-sub rv">Each layer in detail</h3>
@@ -1114,7 +1114,7 @@
         <dt>Data</dt><dd>public sources only · ABS data under CC BY 4.0 · ACMA data under the ACMA licence to use the Register · AusNet and VicEmergency used with attribution · no personal information stored</dd>
         <dt>Honesty</dt><dd>every result is labelled an inference, carries its rule, and an uncoloured town means no evidence, not safe</dd></dl></article>
       <article class="arch-card rv"><span class="arch-n">7</span><h4>Sustainability</h4><dl>
-        <dt>Load</dt><dd>two requests every 15 minutes, and about 10 MB of raw evidence a day</dd>
+        <dt>Load</dt><dd>two requests every 15 minutes, and approximately 7.8 MB of raw evidence per day</dd>
         <dt>Scale</dt><dd>statewide needs one more poller per distributor (Powercor, CitiPower, Jemena, United Energy) with the same rules</dd>
         <dt>Checks</dt><dd>18 pytest tests across the rules (9), the store (5) and the dependency overlay (4)</dd></dl></article>
     </div>
@@ -1830,7 +1830,7 @@
         set(vA, 'batt', 'Degraded, on assumed battery', 'R4 + A3: within the ' + A + ' h window, one site still possibly serving. Never high confidence (C4).');
         set(vB, 'ok', 'Available', 'A2: two sites still have mains, so the town keeps service.');
       } else {
-        set(vA, 'dark', 'Probable blackout', 'R5 + A4: the ' + A + ' h window has expired and no site is serving. The whole town is affected.');
+        set(vA, 'dark', 'Probable blackout', 'R5 + A4: the ' + A + ' h window has expired and no site is assumed to be serving, so a town-wide blackout is inferred, not observed.');
         set(vB, 'ok', 'Available', 'A2: one site is probably dark, but two still have mains.');
       }
     }
